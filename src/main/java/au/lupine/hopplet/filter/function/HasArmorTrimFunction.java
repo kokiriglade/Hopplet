@@ -12,7 +12,7 @@ import org.jspecify.annotations.NonNull;
 import java.util.List;
 import java.util.Set;
 
-public final class HasArmorTrim implements Function<Function.NoArguments> {
+public final class HasArmorTrimFunction implements Function<Function.NoArguments> {
 
     @Override
     public @NonNull String name() {

@@ -58,7 +58,7 @@ public final class Hopplet extends Plugin {
             new DisplayNameFunction(),
             new DisplayNameStartsWithFunction(),
             new EnchantmentFunction(),
-            new HasArmorTrim(),
+            new HasArmorTrimFunction(),
             new IsEdibleFunction(),
             new IsEnchantedFunction(),
             new IsFuelFunction(),
