@@ -1,24 +1,22 @@
-package au.lupine.hopplet.util.edit;
+package au.lupine.hopplet.filter.edit;
 
 import au.lupine.hopplet.Hopplet;
-import au.lupine.hopplet.base.EditTarget;
 import au.lupine.hopplet.filter.Filter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.Hopper;
+import org.bukkit.entity.minecart.HopperMinecart;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-public final class HopperEditTarget implements EditTarget {
+public final class HopperMinecartEditTarget implements EditTarget {
 
+    private final @NonNull HopperMinecart hopper;
     private final @Nullable Component component;
-    private final @NonNull Location location;
 
-    public HopperEditTarget(@NonNull Hopper hopper) {
+    public HopperMinecartEditTarget(@NonNull HopperMinecart hopper) {
+        this.hopper = hopper;
         this.component = hopper.customName();
-        this.location = hopper.getLocation();
     }
 
     @Override
@@ -28,21 +26,20 @@ public final class HopperEditTarget implements EditTarget {
 
     @Override
     public @NonNull Location location() {
-        return location;
+        return hopper.getLocation();
     }
 
     @Override
     public @NonNull Material icon() {
-        return Material.HOPPER;
+        return Material.HOPPER_MINECART;
     }
 
     @Override
     public void edit(@NonNull String input, @Nullable Filter filter) {
         Hopplet instance = Hopplet.instance();
 
-        instance.getServer().getRegionScheduler().run(instance, location, task -> {
-            Block target = location.getBlock();
-            if (!(target.getState(false) instanceof Hopper hopper)) return;
+        instance.getServer().getRegionScheduler().run(instance, hopper.getLocation(), task -> {
+            if (!hopper.isValid()) return;
 
             Filter.Cache.invalidate(hopper);
 
@@ -52,9 +49,6 @@ public final class HopperEditTarget implements EditTarget {
                 hopper.customName(Component.text(input, Filter.style));
                 if (filter != null) Filter.Cache.cache(hopper, filter);
             }
-
-            hopper.setTransferCooldown(20);
-            hopper.update();
         });
     }
 }

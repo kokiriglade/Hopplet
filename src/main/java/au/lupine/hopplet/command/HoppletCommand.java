@@ -2,9 +2,9 @@ package au.lupine.hopplet.command;
 
 import au.lupine.hopplet.Hopplet;
 import au.lupine.hopplet.filter.Function;
-import au.lupine.hopplet.util.edit.EditDialog;
-import au.lupine.hopplet.util.edit.HopperEditTarget;
-import au.lupine.hopplet.util.edit.HopperMinecartEditTarget;
+import au.lupine.hopplet.filter.edit.EditDialog;
+import au.lupine.hopplet.filter.edit.HopperEditTarget;
+import au.lupine.hopplet.filter.edit.HopperMinecartEditTarget;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.tree.LiteralCommandNode;

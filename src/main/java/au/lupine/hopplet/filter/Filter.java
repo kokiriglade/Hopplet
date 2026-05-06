@@ -1,9 +1,10 @@
 package au.lupine.hopplet.filter;
 
-import au.lupine.hopplet.base.EditTarget;
+import au.lupine.hopplet.filter.edit.EditTarget;
+import au.lupine.hopplet.filter.context.ItemStackContext;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
-import au.lupine.hopplet.util.edit.HopperEditTarget;
-import au.lupine.hopplet.util.edit.HopperMinecartEditTarget;
+import au.lupine.hopplet.filter.edit.HopperEditTarget;
+import au.lupine.hopplet.filter.edit.HopperMinecartEditTarget;
 import it.unimi.dsi.fastutil.ints.AbstractInt2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.kyori.adventure.text.Component;
@@ -41,6 +42,10 @@ public final class Filter {
     /// @return `true` if the filter accepts the item in the specified {@link Context}.
     public boolean test(@NonNull Context context) {
         return root.evaluate(context);
+    }
+
+    public boolean test(@NonNull ItemStack stack) {
+        return test(new ItemStackContext(stack));
     }
 
     public @NonNull String raw() {

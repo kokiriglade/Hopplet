@@ -1,7 +1,6 @@
-package au.lupine.hopplet.util.edit;
+package au.lupine.hopplet.filter.edit;
 
 import au.lupine.hopplet.Hopplet;
-import au.lupine.hopplet.base.EditTarget;
 import au.lupine.hopplet.filter.Filter;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import io.papermc.paper.dialog.Dialog;

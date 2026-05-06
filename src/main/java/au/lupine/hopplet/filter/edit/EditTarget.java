@@ -1,4 +1,4 @@
-package au.lupine.hopplet.base;
+package au.lupine.hopplet.filter.edit;
 
 import au.lupine.hopplet.filter.Filter;
 import au.lupine.hopplet.filter.exception.FilterCompileException;

@@ -1,8 +1,8 @@
 package au.lupine.hopplet.listener;
 
-import au.lupine.hopplet.util.edit.EditDialog;
-import au.lupine.hopplet.util.edit.HopperEditTarget;
-import au.lupine.hopplet.util.edit.HopperMinecartEditTarget;
+import au.lupine.hopplet.filter.edit.EditDialog;
+import au.lupine.hopplet.filter.edit.HopperEditTarget;
+import au.lupine.hopplet.filter.edit.HopperMinecartEditTarget;
 import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
 import org.bukkit.entity.Player;
