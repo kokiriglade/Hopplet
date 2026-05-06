@@ -3,13 +3,13 @@ package au.lupine.hopplet.filter.function;
 import au.lupine.hopplet.Hopplet;
 import au.lupine.hopplet.filter.Filter;
 import au.lupine.hopplet.filter.Function;
+import au.lupine.hopplet.filter.context.ItemEntityContext;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import au.lupine.hopplet.util.Either;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.translation.Argument;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Item;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NonNull;
 
@@ -72,10 +72,9 @@ public final class ThrowerFunction implements Function<Set<Either<UUID, String>>
 
     @Override
     public boolean test(Filter.@NonNull Context context, @NonNull Set<Either<UUID, String>> arguments) {
-        Item item = context.item();
-        if (item == null) return false;
+        if (!(context instanceof ItemEntityContext ctx)) return false;
 
-        UUID thrower = item.getThrower();
+        UUID thrower = ctx.item().getThrower();
         if (thrower == null) return false;
 
         for (Either<UUID, String> argument : arguments) {

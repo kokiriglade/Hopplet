@@ -15,9 +15,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.minecart.HopperMinecart;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Range;
 import org.jspecify.annotations.NonNull;
@@ -532,79 +530,7 @@ public final class Filter {
         }
     }
 
-    public static final class Context {
-
-        private final @NonNull ItemStack stack;
-        private final @Nullable Item item;
-        private final @Nullable Inventory source;
-        private final @NonNull Inventory destination;
-
-        private Context(@NonNull ItemStack stack, @Nullable Item item, @Nullable Inventory source, @NonNull Inventory destination) {
-            if (item != null && !item.getItemStack().equals(stack)) throw new IllegalStateException("Specified ItemStack does not match the ItemStack of Item.");
-
-            this.stack = stack;
-            this.item = item;
-            this.source = source;
-            this.destination = destination;
-        }
-
-        public static @NonNull Builder builder() {
-            return new Builder();
-        }
-
-        /// @return The item stack representing the item to be filtered, this is always present.
-        public @NonNull ItemStack stack() {
-            return stack;
-        }
-
-        /// @return The physical item entity, only present if this item wasn't moved from another inventory.
-        public @Nullable Item item() {
-            return item;
-        }
-
-        /// @return The inventory this item came from, only present if this item is from another inventory as opposed to being dropped in the world.
-        public @Nullable Inventory source() {
-            return source;
-        }
-
-        /// @return The inventory that owns this filter context.
-        public @NonNull Inventory destination() {
-            return destination;
-        }
-
-        public static final class Builder {
-
-            private ItemStack stack;
-            private @Nullable Item item;
-            private @Nullable Inventory source;
-            private Inventory destination;
-
-            private Builder() {}
-
-            public @NonNull Context build() {
-                return new Context(stack, item, source, destination);
-            }
-
-            public @NonNull Builder stack(@NonNull ItemStack stack) {
-                this.stack = stack;
-                return this;
-            }
-
-            public @NonNull Builder item(@Nullable Item item) {
-                this.item = item;
-                if (item != null) this.stack = item.getItemStack();
-                return this;
-            }
-
-            public @NonNull Builder source(@Nullable Inventory source) {
-                this.source = source;
-                return this;
-            }
-
-            public @NonNull Builder destination(@NonNull Inventory destination) {
-                this.destination = destination;
-                return this;
-            }
-        }
+    public interface Context {
+        @NonNull ItemStack stack();
     }
 }

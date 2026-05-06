@@ -2,6 +2,8 @@ package au.lupine.hopplet.listener;
 
 import au.lupine.hopplet.Hopplet;
 import au.lupine.hopplet.filter.Filter;
+import au.lupine.hopplet.filter.context.HopperInventoryTransferContext;
+import au.lupine.hopplet.filter.context.HopperPickupItemContext;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import au.lupine.hopplet.util.HopperRouting;
 import org.bukkit.block.Hopper;
@@ -41,12 +43,10 @@ public final class HopperInventoryListener implements Listener {
         ItemStack item = event.getItem();
         Inventory source = event.getSource();
 
-        Filter.Context.Builder context = Filter.Context.builder()
-            .stack(item)
-            .source(source);
-
         if (filter != null) {
-            if (!filter.test(context.destination(destination).build())) event.setCancelled(true);
+            Filter.Context context = new HopperInventoryTransferContext(item, source, destination);
+
+            if (!filter.test(context)) event.setCancelled(true);
             return;
         }
 
@@ -66,7 +66,7 @@ public final class HopperInventoryListener implements Listener {
 
         if (alternativeFilter == null) return;
 
-        if (alternativeFilter.test(context.destination(alternative.getInventory()).build())) event.setCancelled(true);
+        if (alternativeFilter.test(new HopperInventoryTransferContext(item, source, alternative.getInventory()))) event.setCancelled(true);
     }
 
     @EventHandler
@@ -91,10 +91,7 @@ public final class HopperInventoryListener implements Listener {
 
         if (filter == null) return;
 
-        Filter.Context context = Filter.Context.builder()
-            .item(event.getItem())
-            .destination(inventory)
-            .build();
+        Filter.Context context = new HopperPickupItemContext(event.getItem(), inventory);
 
         if (!filter.test(context)) event.setCancelled(true);
     }
