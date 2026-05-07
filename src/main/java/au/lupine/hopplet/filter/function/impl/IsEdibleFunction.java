@@ -1,35 +1,35 @@
-package au.lupine.hopplet.filter.function;
+package au.lupine.hopplet.filter.function.impl;
 
 import au.lupine.hopplet.Hopplet;
-import au.lupine.hopplet.filter.Function;
 import au.lupine.hopplet.filter.context.FilterContext;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
+import au.lupine.hopplet.filter.function.Function;
 import net.kyori.adventure.text.Component;
-import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.Set;
 
-public final class HasArmorTrimFunction implements Function<Function.NoArguments> {
+public final class IsEdibleFunction implements Function<Function.NoArguments> {
 
     @Override
     public @NonNull String name() {
-        return "has_armor_trim";
+        return "is_edible";
     }
 
     @Override
     public @NonNull Set<String> aliases() {
         return Set.of(
-            "is_trimmed",
-            "trimmed"
+            "edible",
+            "is_food",
+            "food"
         );
     }
 
     @Override
     public @NonNull Component description() {
-        return Component.translatable("hopplet.filter.function.has_armor_trim.description");
+        return Component.translatable("hopplet.filter.function.is_edible.description");
     }
 
     @Override
@@ -46,6 +46,6 @@ public final class HasArmorTrimFunction implements Function<Function.NoArguments
 
     @Override
     public boolean test(@NonNull FilterContext context, Function.@NonNull NoArguments arguments) {
-        return context.stack().getItemMeta() instanceof ArmorMeta meta && meta.hasTrim();
+        return context.stack().getType().isEdible();
     }
 }

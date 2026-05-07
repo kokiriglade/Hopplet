@@ -1,9 +1,9 @@
-package au.lupine.hopplet.filter.function;
+package au.lupine.hopplet.filter.function.impl;
 
 import au.lupine.hopplet.Hopplet;
-import au.lupine.hopplet.filter.Function;
 import au.lupine.hopplet.filter.context.FilterContext;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
+import au.lupine.hopplet.filter.function.Function;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.plugin.Plugin;

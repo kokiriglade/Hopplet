@@ -1,10 +1,11 @@
-package au.lupine.hopplet.filter.function;
+package au.lupine.hopplet.filter.function.impl;
 
 import au.lupine.hopplet.Hopplet;
-import au.lupine.hopplet.filter.Function;
 import au.lupine.hopplet.filter.context.FilterContext;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
+import au.lupine.hopplet.filter.function.Function;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NonNull;
 
@@ -12,21 +13,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public final class MaterialContainsFunction implements Function<Set<String>> {
+public final class DisplayNameContainsFunction implements Function<Set<String>> {
 
     @Override
     public @NonNull String name() {
-        return "material_contains";
+        return "display_name_contains";
     }
 
     @Override
     public @NonNull Set<String> aliases() {
-        return Set.of("type_contains");
+        return Set.of("name_contains");
     }
 
     @Override
     public @NonNull Component description() {
-        return Component.translatable("hopplet.filter.function.material_contains.description");
+        return Component.translatable("hopplet.filter.function.display_name_contains.description");
     }
 
     @Override
@@ -43,7 +44,7 @@ public final class MaterialContainsFunction implements Function<Set<String>> {
 
     @Override
     public boolean test(@NonNull FilterContext context, @NonNull Set<String> arguments) {
-        String name = context.stack().getType().getKey().getKey();
+        final String name = PlainTextComponentSerializer.plainText().serialize(context.stack().effectiveName());
 
         for (String argument : arguments) {
             if (name.contains(argument)) return true;

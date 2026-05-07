@@ -1,4 +1,4 @@
-package au.lupine.hopplet.filter;
+package au.lupine.hopplet.filter.function;
 
 import au.lupine.hopplet.Hopplet;
 import au.lupine.hopplet.filter.context.FilterContext;

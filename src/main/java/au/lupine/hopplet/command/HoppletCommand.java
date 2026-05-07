@@ -1,7 +1,7 @@
 package au.lupine.hopplet.command;
 
 import au.lupine.hopplet.Hopplet;
-import au.lupine.hopplet.filter.Function;
+import au.lupine.hopplet.filter.function.Function;
 import au.lupine.hopplet.filter.edit.EditDialog;
 import au.lupine.hopplet.filter.edit.HopperEditTarget;
 import au.lupine.hopplet.filter.edit.HopperMinecartEditTarget;

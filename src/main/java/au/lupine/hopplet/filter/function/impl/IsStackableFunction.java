@@ -1,9 +1,9 @@
-package au.lupine.hopplet.filter.function;
+package au.lupine.hopplet.filter.function.impl;
 
 import au.lupine.hopplet.Hopplet;
-import au.lupine.hopplet.filter.Function;
 import au.lupine.hopplet.filter.context.FilterContext;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
+import au.lupine.hopplet.filter.function.Function;
 import net.kyori.adventure.text.Component;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NonNull;
@@ -11,21 +11,24 @@ import org.jspecify.annotations.NonNull;
 import java.util.List;
 import java.util.Set;
 
-public final class IsUnbreakableFunction implements Function<Function.NoArguments> {
+public final class IsStackableFunction implements Function<Function.NoArguments> {
 
     @Override
     public @NonNull String name() {
-        return "is_unbreakable";
+        return "is_stackable";
     }
 
     @Override
     public @NonNull Set<String> aliases() {
-        return Set.of("unbreakable");
+        return Set.of(
+            "stackable",
+            "can_stack"
+        );
     }
 
     @Override
     public @NonNull Component description() {
-        return Component.translatable("hopplet.filter.function.is_unbreakable.description");
+        return Component.translatable("hopplet.filter.function.is_stackable.description");
     }
 
     @Override
@@ -42,6 +45,6 @@ public final class IsUnbreakableFunction implements Function<Function.NoArgument
 
     @Override
     public boolean test(@NonNull FilterContext context, Function.@NonNull NoArguments arguments) {
-        return context.stack().getItemMeta().isUnbreakable();
+        return context.stack().getType().getMaxStackSize() > 1;
     }
 }
