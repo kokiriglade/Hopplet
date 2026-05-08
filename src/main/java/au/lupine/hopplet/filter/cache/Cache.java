@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Cache {
+public final class Cache {
 
     // Using multiple nested maps allows invalidating a full world/chunk at once, doubt there's any noticeable difference in lookup speed
     // an important assumption is that only the region thread responsible for the chunk will access the final int to object map
