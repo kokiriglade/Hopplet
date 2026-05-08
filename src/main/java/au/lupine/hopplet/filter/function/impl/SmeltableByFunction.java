@@ -1,7 +1,7 @@
 package au.lupine.hopplet.filter.function.impl;
 
 import au.lupine.hopplet.Hopplet;
-import au.lupine.hopplet.filter.context.FilterContext;
+import au.lupine.hopplet.filter.context.Context;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import au.lupine.hopplet.filter.function.Matcher;
 import net.kyori.adventure.text.Component;
@@ -70,7 +70,7 @@ public final class SmeltableByFunction implements Matcher<InventoryType> {
     }
 
     @Override
-    public boolean matches(@NonNull FilterContext context, @NonNull InventoryType argument) {
+    public boolean matches(@NonNull Context context, @NonNull InventoryType argument) {
         ItemStack stack = context.stack();
 
         for (FurnaceInventory inventory : FURNACE_INVENTORIES) {

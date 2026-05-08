@@ -3,7 +3,7 @@ package au.lupine.hopplet.filter.context;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
 
-public final class ItemStackContext implements FilterContext {
+public final class ItemStackContext implements Context {
 
     private final @NonNull ItemStack stack;
 

@@ -1,7 +1,7 @@
 package au.lupine.hopplet.filter.function.impl;
 
 import au.lupine.hopplet.Hopplet;
-import au.lupine.hopplet.filter.context.FilterContext;
+import au.lupine.hopplet.filter.context.Context;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import au.lupine.hopplet.filter.function.Matcher;
 import net.kyori.adventure.text.Component;
@@ -39,7 +39,7 @@ public final class DisplayNameFunction implements Matcher<String> {
     }
 
     @Override
-    public boolean matches(@NonNull FilterContext context, @NonNull String argument) {
+    public boolean matches(@NonNull Context context, @NonNull String argument) {
         String name = PlainTextComponentSerializer.plainText().serialize(context.stack().effectiveName());
         return name.equals(argument);
     }

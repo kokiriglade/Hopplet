@@ -1,7 +1,7 @@
 package au.lupine.hopplet.filter.function.impl;
 
 import au.lupine.hopplet.Hopplet;
-import au.lupine.hopplet.filter.context.FilterContext;
+import au.lupine.hopplet.filter.context.Context;
 import au.lupine.hopplet.filter.function.Predicate;
 import net.kyori.adventure.text.Component;
 import org.bukkit.plugin.Plugin;
@@ -36,7 +36,7 @@ public final class IsEdibleFunction implements Predicate {
     }
 
     @Override
-    public boolean test(@NonNull FilterContext context, @NonNull Void compiled) {
+    public boolean test(@NonNull Context context, @NonNull Void compiled) {
         return context.stack().getType().isEdible();
     }
 }

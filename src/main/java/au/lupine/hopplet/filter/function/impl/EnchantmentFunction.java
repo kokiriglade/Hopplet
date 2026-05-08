@@ -1,7 +1,7 @@
 package au.lupine.hopplet.filter.function.impl;
 
 import au.lupine.hopplet.Hopplet;
-import au.lupine.hopplet.filter.context.FilterContext;
+import au.lupine.hopplet.filter.context.Context;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import au.lupine.hopplet.filter.function.Matcher;
 import au.lupine.hopplet.util.Comparator;
@@ -83,7 +83,7 @@ public final class EnchantmentFunction implements Matcher<EnchantmentFunction.Ar
     public record Argument(@NonNull Enchantment enchantment, @Nullable Comparator comparator, @Nullable Integer level) {}
 
     @Override
-    public boolean matches(@NonNull FilterContext context, @NonNull Argument argument) {
+    public boolean matches(@NonNull Context context, @NonNull Argument argument) {
         ItemStack stack = context.stack();
 
         Map<Enchantment, Integer> enchantments = stack.getItemMeta() instanceof EnchantmentStorageMeta meta

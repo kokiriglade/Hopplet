@@ -1,7 +1,7 @@
 package au.lupine.hopplet.filter.function.impl;
 
 import au.lupine.hopplet.Hopplet;
-import au.lupine.hopplet.filter.context.FilterContext;
+import au.lupine.hopplet.filter.context.Context;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import au.lupine.hopplet.filter.function.Matcher;
 import net.kyori.adventure.text.Component;
@@ -50,7 +50,7 @@ public final class BookGenerationFunction implements Matcher<BookMeta.Generation
     }
 
     @Override
-    public boolean matches(@NonNull FilterContext context, BookMeta.@NonNull Generation argument) {
+    public boolean matches(@NonNull Context context, BookMeta.@NonNull Generation argument) {
         ItemStack item = context.stack();
         if (!(item.getItemMeta() instanceof BookMeta meta)) return false;
 

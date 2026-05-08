@@ -1,7 +1,7 @@
 package au.lupine.hopplet.filter.function.impl;
 
 import au.lupine.hopplet.Hopplet;
-import au.lupine.hopplet.filter.context.FilterContext;
+import au.lupine.hopplet.filter.context.Context;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import au.lupine.hopplet.filter.function.Function;
 import au.lupine.hopplet.filter.function.Matcher;
@@ -60,7 +60,7 @@ public final class TagFunction implements Matcher<Set<Material>> {
     }
 
     @Override
-    public boolean matches(@NonNull FilterContext context, @NonNull Set<Material> materials) {
+    public boolean matches(@NonNull Context context, @NonNull Set<Material> materials) {
         return materials.contains(context.stack().getType());
     }
 }

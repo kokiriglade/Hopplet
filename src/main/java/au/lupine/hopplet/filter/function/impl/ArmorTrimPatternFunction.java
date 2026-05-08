@@ -1,7 +1,7 @@
 package au.lupine.hopplet.filter.function.impl;
 
 import au.lupine.hopplet.Hopplet;
-import au.lupine.hopplet.filter.context.FilterContext;
+import au.lupine.hopplet.filter.context.Context;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import au.lupine.hopplet.filter.function.Function;
 import au.lupine.hopplet.filter.function.Matcher;
@@ -63,7 +63,7 @@ public final class ArmorTrimPatternFunction implements Matcher<TrimPattern> {
     }
 
     @Override
-    public boolean matches(@NonNull FilterContext context, @NonNull TrimPattern pattern) {
+    public boolean matches(@NonNull Context context, @NonNull TrimPattern pattern) {
         if (!(context.stack().getItemMeta() instanceof ArmorMeta meta)) return false;
 
         ArmorTrim trim = meta.getTrim();

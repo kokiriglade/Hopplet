@@ -1,7 +1,7 @@
 package au.lupine.hopplet.filter.function;
 
 import au.lupine.hopplet.Hopplet;
-import au.lupine.hopplet.filter.context.FilterContext;
+import au.lupine.hopplet.filter.context.Context;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.translation.Argument;
@@ -38,7 +38,7 @@ public interface Function<ArgumentType> {
 
     @NonNull ArgumentType compile(@NonNull List<String> arguments) throws FilterCompileException;
 
-    boolean test(@NonNull FilterContext context, @NonNull ArgumentType compiled);
+    boolean test(@NonNull Context context, @NonNull ArgumentType compiled);
 
     default boolean enabled() {
         List<String> disabled;

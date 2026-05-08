@@ -1,6 +1,6 @@
 package au.lupine.hopplet.filter.function;
 
-import au.lupine.hopplet.filter.context.FilterContext;
+import au.lupine.hopplet.filter.context.Context;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.translation.Argument;
@@ -25,7 +25,7 @@ public interface Matcher<ArgumentType> extends Function<List<ArgumentType>> {
 
     @NonNull ArgumentType parse(@NonNull String argument) throws FilterCompileException;
 
-    boolean matches(@NonNull FilterContext context, @NonNull ArgumentType argument);
+    boolean matches(@NonNull Context context, @NonNull ArgumentType argument);
 
     @Override
     default @NonNull List<ArgumentType> compile(@NonNull List<String> arguments) throws FilterCompileException {
@@ -44,7 +44,7 @@ public interface Matcher<ArgumentType> extends Function<List<ArgumentType>> {
     }
 
     @Override
-    default boolean test(@NonNull FilterContext context, @NonNull List<ArgumentType> argument) {
+    default boolean test(@NonNull Context context, @NonNull List<ArgumentType> argument) {
         return strategy().test(context, argument, this::matches);
     }
 
@@ -52,9 +52,9 @@ public interface Matcher<ArgumentType> extends Function<List<ArgumentType>> {
     interface MatchStrategy<ArgumentType> {
 
         boolean test(
-            @NonNull FilterContext context,
+            @NonNull Context context,
             @NonNull List<ArgumentType> arguments,
-            @NonNull BiPredicate<FilterContext, ArgumentType> matches
+            @NonNull BiPredicate<Context, ArgumentType> matches
         );
 
         static <ArgumentType> @NonNull MatchStrategy<ArgumentType> all() {

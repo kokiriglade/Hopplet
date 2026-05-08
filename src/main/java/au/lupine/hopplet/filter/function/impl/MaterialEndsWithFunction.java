@@ -1,7 +1,7 @@
 package au.lupine.hopplet.filter.function.impl;
 
 import au.lupine.hopplet.Hopplet;
-import au.lupine.hopplet.filter.context.FilterContext;
+import au.lupine.hopplet.filter.context.Context;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import au.lupine.hopplet.filter.function.Matcher;
 import net.kyori.adventure.text.Component;
@@ -38,7 +38,7 @@ public final class MaterialEndsWithFunction implements Matcher<String> {
     }
 
     @Override
-    public boolean matches(@NonNull FilterContext context, @NonNull String argument) {
+    public boolean matches(@NonNull Context context, @NonNull String argument) {
         String name = context.stack().getType().getKey().getKey();
         return name.endsWith(argument);
     }

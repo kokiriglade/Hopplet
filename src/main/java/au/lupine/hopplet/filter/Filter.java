@@ -2,7 +2,7 @@ package au.lupine.hopplet.filter;
 
 import au.lupine.hopplet.filter.compiler.Compiler;
 import au.lupine.hopplet.filter.compiler.Node;
-import au.lupine.hopplet.filter.context.FilterContext;
+import au.lupine.hopplet.filter.context.Context;
 import au.lupine.hopplet.filter.context.ItemStackContext;
 import au.lupine.hopplet.filter.edit.EditTarget;
 import au.lupine.hopplet.filter.edit.HopperEditTarget;
@@ -62,8 +62,8 @@ public final class Filter {
         return Compiler.compile(hopper);
     }
 
-    /// @return `true` if the filter accepts the specified {@link FilterContext}.
-    public boolean test(@NonNull FilterContext context) {
+    /// @return `true` if the filter accepts the specified {@link Context}.
+    public boolean test(@NonNull Context context) {
         return root.evaluate(context);
     }
 

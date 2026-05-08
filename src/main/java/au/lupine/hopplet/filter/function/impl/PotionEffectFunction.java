@@ -1,7 +1,7 @@
 package au.lupine.hopplet.filter.function.impl;
 
 import au.lupine.hopplet.Hopplet;
-import au.lupine.hopplet.filter.context.FilterContext;
+import au.lupine.hopplet.filter.context.Context;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import au.lupine.hopplet.filter.function.Matcher;
 import au.lupine.hopplet.util.Comparator;
@@ -82,7 +82,7 @@ public final class PotionEffectFunction implements Matcher<PotionEffectFunction.
     public record Argument(@NonNull PotionEffectType effect, @Nullable Comparator comparator, @Nullable Integer amplifier) {}
 
     @Override
-    public boolean matches(@NonNull FilterContext context, @NonNull Argument argument) {
+    public boolean matches(@NonNull Context context, @NonNull Argument argument) {
         ItemStack stack = context.stack();
 
         if (!(stack.getItemMeta() instanceof PotionMeta meta)) return false;

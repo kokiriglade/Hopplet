@@ -1,7 +1,7 @@
 package au.lupine.hopplet.filter.function.impl;
 
 import au.lupine.hopplet.Hopplet;
-import au.lupine.hopplet.filter.context.FilterContext;
+import au.lupine.hopplet.filter.context.Context;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import au.lupine.hopplet.filter.function.Matcher;
 import au.lupine.hopplet.util.Comparator;
@@ -65,7 +65,7 @@ public final class ItemDurabilityFunction implements Matcher<ItemDurabilityFunct
     public record Argument(@NonNull Comparator comparator, @Range(from = 0, to = 100) int durability) {}
 
     @Override
-    public boolean matches(@NonNull FilterContext context, @NonNull Argument argument) {
+    public boolean matches(@NonNull Context context, @NonNull Argument argument) {
         ItemStack item = context.stack();
         if (!(item.getItemMeta() instanceof Damageable meta)) return false;
 

@@ -3,7 +3,7 @@ package au.lupine.hopplet.listener;
 import au.lupine.hopplet.Hopplet;
 import au.lupine.hopplet.filter.Filter;
 import au.lupine.hopplet.filter.cache.Cache;
-import au.lupine.hopplet.filter.context.FilterContext;
+import au.lupine.hopplet.filter.context.Context;
 import au.lupine.hopplet.filter.context.HopperInventoryTransferContext;
 import au.lupine.hopplet.filter.context.HopperPickupItemContext;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
@@ -46,7 +46,7 @@ public final class HopperInventoryListener implements Listener {
         Inventory source = event.getSource();
 
         if (filter != null) {
-            FilterContext context = new HopperInventoryTransferContext(item, source, destination);
+            Context context = new HopperInventoryTransferContext(item, source, destination);
 
             if (!filter.test(context)) event.setCancelled(true);
             return;
@@ -93,7 +93,7 @@ public final class HopperInventoryListener implements Listener {
 
         if (filter == null) return;
 
-        FilterContext context = new HopperPickupItemContext(event.getItem(), inventory);
+        Context context = new HopperPickupItemContext(event.getItem(), inventory);
 
         if (!filter.test(context)) event.setCancelled(true);
     }

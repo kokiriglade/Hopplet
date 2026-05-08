@@ -1,7 +1,7 @@
 package au.lupine.hopplet.filter.function.impl;
 
 import au.lupine.hopplet.Hopplet;
-import au.lupine.hopplet.filter.context.FilterContext;
+import au.lupine.hopplet.filter.context.Context;
 import au.lupine.hopplet.filter.context.InventoryTransferContext;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import au.lupine.hopplet.filter.function.Matcher;
@@ -54,7 +54,7 @@ public final class SourceInventoryTypeFunction implements Matcher<InventoryType>
     }
 
     @Override
-    public boolean matches(@NonNull FilterContext context, @NonNull InventoryType argument) {
+    public boolean matches(@NonNull Context context, @NonNull InventoryType argument) {
         if (!(context instanceof InventoryTransferContext ctx)) return false;
 
         Inventory source = ctx.source();

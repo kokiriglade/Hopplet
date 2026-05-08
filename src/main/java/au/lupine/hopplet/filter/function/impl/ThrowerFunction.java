@@ -1,7 +1,7 @@
 package au.lupine.hopplet.filter.function.impl;
 
 import au.lupine.hopplet.Hopplet;
-import au.lupine.hopplet.filter.context.FilterContext;
+import au.lupine.hopplet.filter.context.Context;
 import au.lupine.hopplet.filter.context.ItemEntityContext;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import au.lupine.hopplet.filter.function.Matcher;
@@ -57,7 +57,7 @@ public final class ThrowerFunction implements Matcher<Either<UUID, String>> {
     }
 
     @Override
-    public boolean matches(@NonNull FilterContext context, @NonNull Either<UUID, String> either) {
+    public boolean matches(@NonNull Context context, @NonNull Either<UUID, String> either) {
         if (!(context instanceof ItemEntityContext ctx)) return false;
 
         UUID thrower = ctx.item().getThrower();
