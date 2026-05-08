@@ -31,6 +31,12 @@ public final class FilterEditListener implements Listener {
 
         if (!event.getAction().isRightClick()) return;
 
+        ItemStack item = event.getItem();
+        if (item != null) {
+            Material material = item.getType();
+            if (material.isBlock()) return;
+        }
+
         if (!player.isSneaking()) return;
 
         Block block = event.getClickedBlock();
