@@ -52,6 +52,11 @@ public final class PotionEffectFunction implements Matcher<PotionEffectFunction.
     }
 
     @Override
+    public @NonNull MatchStrategy<Argument> strategy() {
+        return MatchStrategy.all();
+    }
+
+    @Override
     public @NonNull Argument parse(@NonNull String argument) throws FilterCompileException {
         String normalised = argument.toLowerCase().replaceAll("\\s", "");
 

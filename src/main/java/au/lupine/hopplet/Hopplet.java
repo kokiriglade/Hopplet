@@ -64,6 +64,7 @@ public final class Hopplet extends Plugin {
             new IsEnchantedFunction(),
             new IsFuelFunction(),
             new IsRepairableFunction(),
+            new IsSmeltableFunction(),
             new IsStackableFunction(),
             new IsUnbreakableFunction(),
             new ItemDurabilityFunction(),

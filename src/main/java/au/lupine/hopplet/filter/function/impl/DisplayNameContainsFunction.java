@@ -34,6 +34,11 @@ public final class DisplayNameContainsFunction implements Matcher<String> {
     }
 
     @Override
+    public @NonNull MatchStrategy<String> strategy() {
+        return MatchStrategy.all();
+    }
+
+    @Override
     public @NonNull String parse(@NonNull String argument) throws FilterCompileException {
         return argument;
     }

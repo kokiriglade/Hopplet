@@ -43,6 +43,11 @@ public final class PotionDurationFunction implements Matcher<PotionDurationFunct
     }
 
     @Override
+    public @NonNull MatchStrategy<Argument> strategy() {
+        return MatchStrategy.all();
+    }
+
+    @Override
     public @NonNull Argument parse(@NonNull String argument) throws FilterCompileException {
         String normalised = argument.toLowerCase().replaceAll("\\s", "");
 

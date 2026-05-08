@@ -23,7 +23,7 @@ public final class SmeltableByFunction implements Matcher<InventoryType> {
         InventoryType.SMOKER
     );
 
-    private static final @NonNull Set<FurnaceInventory> FURNACE_INVENTORIES = Set.of(
+    public static final @NonNull Set<FurnaceInventory> FURNACE_INVENTORIES = Set.of(
         (FurnaceInventory) Bukkit.createInventory(null, InventoryType.BLAST_FURNACE),
         (FurnaceInventory) Bukkit.createInventory(null, InventoryType.FURNACE),
         (FurnaceInventory) Bukkit.createInventory(null, InventoryType.SMOKER)
@@ -32,14 +32,6 @@ public final class SmeltableByFunction implements Matcher<InventoryType> {
     @Override
     public @NonNull String name() {
         return "smeltable_by";
-    }
-
-    @Override
-    public @NonNull Set<String> aliases() {
-        return Set.of(
-            "smeltable",
-            "is_smeltable"
-        );
     }
 
     @Override
