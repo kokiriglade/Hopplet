@@ -1,7 +1,7 @@
 package au.lupine.hopplet.filter.edit;
 
 import au.lupine.hopplet.Hopplet;
-import au.lupine.hopplet.filter.compiler.FilterCompiler;
+import au.lupine.hopplet.filter.compiler.Compiler;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import io.papermc.paper.dialog.Dialog;
 import io.papermc.paper.registry.data.dialog.ActionButton;
@@ -82,7 +82,7 @@ public final class EditDialog {
 
                 Component result;
                 try {
-                    FilterCompiler.compile(input);
+                    Compiler.compile(input);
                     result = translate(player, "hopplet.dialog.edit_filter.action.validate.success");
                 } catch (FilterCompileException e) {
                     result = e.asComponent();

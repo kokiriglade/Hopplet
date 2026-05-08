@@ -1,8 +1,8 @@
 package au.lupine.hopplet.filter.compiler;
 
-import au.lupine.hopplet.filter.function.Function;
 import au.lupine.hopplet.filter.context.FilterContext;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
+import au.lupine.hopplet.filter.function.Function;
 import org.jspecify.annotations.NonNull;
 
 import java.util.List;

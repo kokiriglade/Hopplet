@@ -2,18 +2,16 @@ package au.lupine.hopplet.filter.function.impl;
 
 import au.lupine.hopplet.Hopplet;
 import au.lupine.hopplet.filter.context.FilterContext;
-import au.lupine.hopplet.filter.exception.FilterCompileException;
-import au.lupine.hopplet.filter.function.Function;
+import au.lupine.hopplet.filter.function.Predicate;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NonNull;
 
-import java.util.List;
 import java.util.Set;
 
-public final class IsEnchantedFunction implements Function<Function.NoArguments> {
+public final class IsEnchantedFunction implements Predicate {
 
     @Override
     public @NonNull String name() {
@@ -36,14 +34,7 @@ public final class IsEnchantedFunction implements Function<Function.NoArguments>
     }
 
     @Override
-    public @NonNull NoArguments compile(@NonNull List<String> arguments) throws FilterCompileException {
-        argsNotRequired(arguments);
-
-        return NO_ARGUMENTS;
-    }
-
-    @Override
-    public boolean test(@NonNull FilterContext context, Function.@NonNull NoArguments arguments) {
+    public boolean test(@NonNull FilterContext context, @NonNull Void compiled) {
         ItemStack item = context.stack();
 
         if (!item.getEnchantments().isEmpty()) return true;

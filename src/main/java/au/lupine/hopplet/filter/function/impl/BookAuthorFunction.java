@@ -3,18 +3,16 @@ package au.lupine.hopplet.filter.function.impl;
 import au.lupine.hopplet.Hopplet;
 import au.lupine.hopplet.filter.context.FilterContext;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
-import au.lupine.hopplet.filter.function.Function;
+import au.lupine.hopplet.filter.function.Matcher;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NonNull;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-public final class BookAuthorFunction implements Function<Set<String>> {
+public final class BookAuthorFunction implements Matcher<String> {
 
     @Override
     public @NonNull String name() {
@@ -37,20 +35,18 @@ public final class BookAuthorFunction implements Function<Set<String>> {
     }
 
     @Override
-    public @NonNull Set<String> compile(@NonNull List<String> arguments) throws FilterCompileException {
-        argsRequired(arguments);
-
-        return new HashSet<>(arguments);
+    public @NonNull String parse(@NonNull String argument) throws FilterCompileException {
+        return argument;
     }
 
     @Override
-    public boolean test(@NonNull FilterContext context, @NonNull Set<String> arguments) {
+    public boolean matches(@NonNull FilterContext context, @NonNull String argument) {
         ItemStack stack = context.stack();
         if (!(stack.getItemMeta() instanceof BookMeta meta)) return false;
 
         String author = meta.getAuthor();
         if (author == null) return false;
 
-        return arguments.contains(author);
+        return argument.equals(author);
     }
 }

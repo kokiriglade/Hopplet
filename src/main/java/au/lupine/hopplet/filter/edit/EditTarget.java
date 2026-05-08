@@ -1,7 +1,7 @@
 package au.lupine.hopplet.filter.edit;
 
 import au.lupine.hopplet.filter.Filter;
-import au.lupine.hopplet.filter.compiler.FilterCompiler;
+import au.lupine.hopplet.filter.compiler.Compiler;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -34,7 +34,7 @@ public interface EditTarget {
         Filter filter = null;
 
         try {
-            filter = FilterCompiler.compile(input);
+            filter = Compiler.compile(input);
         } catch (FilterCompileException e) {
             player.sendMessage(e);
         }

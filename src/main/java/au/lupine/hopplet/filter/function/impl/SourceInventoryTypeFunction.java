@@ -4,7 +4,7 @@ import au.lupine.hopplet.Hopplet;
 import au.lupine.hopplet.filter.context.FilterContext;
 import au.lupine.hopplet.filter.context.InventoryTransferContext;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
-import au.lupine.hopplet.filter.function.Function;
+import au.lupine.hopplet.filter.function.Matcher;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.translation.Argument;
 import org.bukkit.event.inventory.InventoryType;
@@ -12,11 +12,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NonNull;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-public final class SourceInventoryTypeFunction implements Function<Set<InventoryType>> {
+public final class SourceInventoryTypeFunction implements Matcher<InventoryType> {
 
     @Override
     public @NonNull String name() {
@@ -42,33 +40,26 @@ public final class SourceInventoryTypeFunction implements Function<Set<Inventory
     }
 
     @Override
-    public @NonNull Set<InventoryType> compile(@NonNull List<String> arguments) throws FilterCompileException {
-        argsRequired(arguments);
-
-        Set<InventoryType> types = new HashSet<>();
-        for (String argument : arguments) {
-            try {
-                types.add(InventoryType.valueOf(argument.toUpperCase()));
-            } catch (IllegalArgumentException e) {
-                throw new FilterCompileException(
-                    Component.translatable(
-                        "hopplet.filter.function.source_inventory_type.compilation.exception.unknown_inventory_type",
-                        Argument.string("input", argument)
-                    )
-                );
-            }
+    public @NonNull InventoryType parse(@NonNull String argument) throws FilterCompileException {
+        try {
+            return InventoryType.valueOf(argument.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new FilterCompileException(
+                Component.translatable(
+                    "hopplet.filter.function.source_inventory_type.compilation.exception.unknown_inventory_type",
+                    Argument.string("input", argument)
+                )
+            );
         }
-
-        return types;
     }
 
     @Override
-    public boolean test(@NonNull FilterContext context, @NonNull Set<InventoryType> types) {
+    public boolean matches(@NonNull FilterContext context, @NonNull InventoryType argument) {
         if (!(context instanceof InventoryTransferContext ctx)) return false;
 
         Inventory source = ctx.source();
         if (source == null) return false;
 
-        return types.contains(source.getType());
+        return source.getType() == argument;
     }
 }

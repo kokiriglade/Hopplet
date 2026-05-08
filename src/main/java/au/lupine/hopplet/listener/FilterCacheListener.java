@@ -1,8 +1,8 @@
 package au.lupine.hopplet.listener;
 
 import au.lupine.hopplet.filter.Filter;
-import au.lupine.hopplet.filter.cache.FilterCache;
-import au.lupine.hopplet.filter.compiler.FilterCompiler;
+import au.lupine.hopplet.filter.cache.Cache;
+import au.lupine.hopplet.filter.compiler.Compiler;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
 import it.unimi.dsi.fastutil.ints.AbstractInt2ObjectMap;
@@ -30,7 +30,7 @@ import java.util.Map;
 public final class FilterCacheListener implements Listener {
 
     private void invalidate(@NonNull World world,@NonNull Collection<Block> blocks) {
-        Map<Long, AbstractInt2ObjectMap<Filter>> worldChunkCache = FilterCache.BLOCK_CACHE.get(world.getUID());
+        Map<Long, AbstractInt2ObjectMap<Filter>> worldChunkCache = Cache.BLOCK_CACHE.get(world.getUID());
         if (worldChunkCache == null) return;
 
         for (Block block : blocks) {
@@ -39,7 +39,7 @@ public final class FilterCacheListener implements Listener {
             AbstractInt2ObjectMap<Filter> chunkCache = worldChunkCache.get(Chunk.getChunkKey(block.getX() >> 4, block.getZ() >> 4));
             if (chunkCache == null) continue;
 
-            chunkCache.remove(FilterCache.packChunkRelativeCoords(block.getX(), block.getY(), block.getZ()));
+            chunkCache.remove(Cache.packChunkRelativeCoords(block.getX(), block.getY(), block.getZ()));
         }
     }
 
@@ -49,19 +49,19 @@ public final class FilterCacheListener implements Listener {
 
         Filter filter;
         try {
-            filter = FilterCompiler.compile(hopper);
+            filter = Compiler.compile(hopper);
         } catch (FilterCompileException e) {
             return;
         }
 
         if (filter == null) return;
 
-        FilterCache.cache(hopper, filter);
+        Cache.cache(hopper, filter);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void on(@NonNull BlockBreakEvent event) {
-        if (event.getBlock().getType() == Material.HOPPER) FilterCache.invalidate(event.getBlock());
+        if (event.getBlock().getType() == Material.HOPPER) Cache.invalidate(event.getBlock());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -70,19 +70,19 @@ public final class FilterCacheListener implements Listener {
 
         Filter filter;
         try {
-            filter = FilterCompiler.compile(hopper);
+            filter = Compiler.compile(hopper);
         } catch (FilterCompileException e) {
             return;
         }
 
         if (filter == null) return;
 
-        FilterCache.cache(hopper, filter);
+        Cache.cache(hopper, filter);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void on(@NonNull EntityRemoveFromWorldEvent event) {
-        if (event.getEntity() instanceof HopperMinecart hopper) FilterCache.invalidate(hopper);
+        if (event.getEntity() instanceof HopperMinecart hopper) Cache.invalidate(hopper);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -97,12 +97,12 @@ public final class FilterCacheListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void on(@NonNull WorldUnloadEvent event) {
-        FilterCache.BLOCK_CACHE.remove(event.getWorld().getUID());
+        Cache.BLOCK_CACHE.remove(event.getWorld().getUID());
     }
 
     @EventHandler
     public void cleanupBlockFilterCache(@NonNull ChunkUnloadEvent event) {
-        Map<Long, ?> worldChunkCache = FilterCache.BLOCK_CACHE.get(event.getWorld().getUID());
+        Map<Long, ?> worldChunkCache = Cache.BLOCK_CACHE.get(event.getWorld().getUID());
 
         if (worldChunkCache == null) return;
 

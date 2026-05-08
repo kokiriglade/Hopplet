@@ -3,10 +3,9 @@ package au.lupine.hopplet.filter.function.impl;
 import au.lupine.hopplet.Hopplet;
 import au.lupine.hopplet.filter.context.FilterContext;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
-import au.lupine.hopplet.filter.function.Function;
+import au.lupine.hopplet.filter.function.Matcher;
 import au.lupine.hopplet.util.Comparator;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.translation.Argument;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.Plugin;
@@ -15,11 +14,10 @@ import org.bukkit.potion.PotionType;
 import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public final class PotionDurationFunction implements Function<Set<PotionDurationFunction.Spec>> {
+public final class PotionDurationFunction implements Matcher<PotionDurationFunction.Argument> {
 
     @Override
     public @NonNull String name() {
@@ -45,43 +43,36 @@ public final class PotionDurationFunction implements Function<Set<PotionDuration
     }
 
     @Override
-    public @NonNull Set<Spec> compile(@NonNull List<String> arguments) throws FilterCompileException {
-        argsRequired(arguments);
+    public @NonNull Argument parse(@NonNull String argument) throws FilterCompileException {
+        String normalised = argument.toLowerCase().replaceAll("\\s", "");
 
-        Set<Spec> durations = new HashSet<>();
-        for (String argument : arguments) {
-            String normalised = argument.toLowerCase().replaceAll("\\s", "");
+        if (normalised.equals("infinite") || normalised.equals("unlimited"))
+            return new Argument(Comparator.EQUAL_TO, PotionEffect.INFINITE_DURATION);
 
-            if (normalised.equals("infinite") || normalised.equals("unlimited")) {
-                durations.add(new Spec(Comparator.EQUAL_TO, PotionEffect.INFINITE_DURATION));
-                continue;
+        Comparator comparator = Comparator.EQUAL_TO;
+        String value = normalised;
+
+        for (Comparator c : Comparator.values()) {
+            String symbol = c.symbol();
+
+            if (normalised.startsWith(symbol)) {
+                comparator = c;
+                value = normalised.substring(symbol.length());
+                break;
             }
-
-            Comparator comparator = Comparator.EQUAL_TO;
-            String value = normalised;
-
-            for (Comparator c : Comparator.values()) {
-                String symbol = c.symbol();
-
-                if (normalised.startsWith(symbol)) {
-                    comparator = c;
-                    value = normalised.substring(symbol.length());
-                    break;
-                }
-            }
-
-            int ticks = parseTicks(value, argument);
-            durations.add(new Spec(comparator, ticks));
         }
 
-        return durations;
+        int ticks = ticks(value, argument);
+        return new Argument(comparator, ticks);
     }
 
-    @Override
-    public boolean test(@NonNull FilterContext context, @NonNull Set<Spec> arguments) {
-        ItemStack item = context.stack();
+    public record Argument(@NonNull Comparator comparator, int ticks) {}
 
-        if (!(item.getItemMeta() instanceof PotionMeta meta)) return false;
+    @Override
+    public boolean matches(@NonNull FilterContext context, @NonNull Argument argument) {
+        ItemStack stack = context.stack();
+
+        if (!(stack.getItemMeta() instanceof PotionMeta meta)) return false;
 
         List<PotionEffect> effects = new ArrayList<>();
 
@@ -91,32 +82,30 @@ public final class PotionDurationFunction implements Function<Set<PotionDuration
         effects.addAll(meta.getCustomEffects());
         if (effects.isEmpty()) return false;
 
-        for (Spec argument : arguments) {
-            for (PotionEffect effect : effects) {
-                int duration = effect.getDuration();
+        for (PotionEffect effect : effects) {
+            int duration = effect.getDuration();
 
-                if (duration == PotionEffect.INFINITE_DURATION) {
-                    if (argument.ticks == PotionEffect.INFINITE_DURATION) return true;
-                    if (argument.comparator == Comparator.GREATER_THAN || argument.comparator == Comparator.GREATER_THAN_OR_EQUAL_TO) return true;
+            if (duration == PotionEffect.INFINITE_DURATION) {
+                if (argument.ticks == PotionEffect.INFINITE_DURATION) return true;
+                if (argument.comparator == Comparator.GREATER_THAN || argument.comparator == Comparator.GREATER_THAN_OR_EQUAL_TO) return true;
 
-                    continue;
-                }
-
-                if (argument.ticks == PotionEffect.INFINITE_DURATION) continue;
-
-                if (argument.comparator.compare(duration, argument.ticks)) return true;
+                continue;
             }
+
+            if (argument.ticks == PotionEffect.INFINITE_DURATION) continue;
+
+            if (argument.comparator.compare(duration, argument.ticks)) return true;
         }
 
         return false;
     }
 
-    private static int parseTicks(@NonNull String text, @NonNull String argument) {
+    private static int ticks(@NonNull String text, @NonNull String argument) {
         if (text.isEmpty()) {
             throw new FilterCompileException(
                 Component.translatable(
                     "hopplet.filter.function.potion_duration.compilation.exception.no_duration_specified",
-                    Argument.string("input", argument)
+                    net.kyori.adventure.text.minimessage.translation.Argument.string("input", argument)
                 )
             );
         }
@@ -128,7 +117,7 @@ public final class PotionDurationFunction implements Function<Set<PotionDuration
             throw new FilterCompileException(
                 Component.translatable(
                     "hopplet.filter.function.potion_duration.compilation.exception.invalid_duration",
-                    Argument.string("input", argument)
+                    net.kyori.adventure.text.minimessage.translation.Argument.string("input", argument)
                 )
             );
         }
@@ -137,13 +126,11 @@ public final class PotionDurationFunction implements Function<Set<PotionDuration
             throw new FilterCompileException(
                 Component.translatable(
                     "hopplet.filter.function.potion_duration.compilation.exception.less_than_negative_one",
-                    Argument.string("input", argument)
+                    net.kyori.adventure.text.minimessage.translation.Argument.string("input", argument)
                 )
             );
         }
 
         return ticks;
     }
-
-    public record Spec(@NonNull Comparator comparator, int ticks) {}
 }

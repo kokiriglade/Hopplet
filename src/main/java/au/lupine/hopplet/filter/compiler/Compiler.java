@@ -11,7 +11,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public final class FilterCompiler {
+public final class Compiler {
 
     /// Compiles a raw string into a {@link Filter}.
     /// @return A compiled Filter, or `null` if the specified string is null, empty, or contains only whitespace.

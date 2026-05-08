@@ -3,8 +3,8 @@ package au.lupine.hopplet;
 import au.lupine.hopplet.base.Plugin;
 import au.lupine.hopplet.command.HoppletCommand;
 import au.lupine.hopplet.filter.Filter;
+import au.lupine.hopplet.filter.cache.Cache;
 import au.lupine.hopplet.filter.function.Function;
-import au.lupine.hopplet.filter.cache.FilterCache;
 import au.lupine.hopplet.filter.function.impl.*;
 import au.lupine.hopplet.listener.FilterCacheListener;
 import au.lupine.hopplet.listener.FilterEditListener;
@@ -83,7 +83,7 @@ public final class Hopplet extends Plugin {
 
     @Override
     public void disable() {
-        FilterCache.invalidate();
+        Cache.invalidate();
     }
 
     @Override

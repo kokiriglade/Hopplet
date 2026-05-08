@@ -1,7 +1,7 @@
 package au.lupine.hopplet.filter.cache;
 
 import au.lupine.hopplet.filter.Filter;
-import au.lupine.hopplet.filter.compiler.FilterCompiler;
+import au.lupine.hopplet.filter.compiler.Compiler;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import it.unimi.dsi.fastutil.ints.AbstractInt2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class FilterCache {
+public class Cache {
 
     // Using multiple nested maps allows invalidating a full world/chunk at once, doubt there's any noticeable difference in lookup speed
     // an important assumption is that only the region thread responsible for the chunk will access the final int to object map
@@ -107,7 +107,7 @@ public class FilterCache {
         Filter filter = map.get(packed);
         if (filter != null) return filter;
 
-        Filter compiled = FilterCompiler.compile(hopper);
+        Filter compiled = Compiler.compile(hopper);
         if (compiled != null) map.put(packed, compiled);
 
         return compiled;
@@ -143,7 +143,7 @@ public class FilterCache {
         Filter filter = get(hopper);
         if (filter != null) return filter;
 
-        Filter compiled = FilterCompiler.compile(hopper);
+        Filter compiled = Compiler.compile(hopper);
         if (compiled != null) cache(hopper, compiled);
 
         return compiled;
@@ -153,15 +153,13 @@ public class FilterCache {
         invalidate(hopper.getUniqueId());
     }
 
-    /**
-     * Packs chunk relative x and z coords and the y coordinate into a single integer.
-     *
-     * @param x The world or chunk relative x coordinate.
-     * @param y The world relative y coordinate, the maximum supported range is from 2^23 - 1 to -2^23
-     * @param z The world or chunk relative z coordinate.
-     * @return A packed integer that uniquely identifies these coords in a chunk.
-     */
-    public static int packChunkRelativeCoords(final int x, @Range(from = -8_388_608, to = 8_388_607) final int y, final int z) {
+    /// Packs chunk relative x and z coords and the y coordinate into a single integer.
+    ///
+    /// @param x The world or chunk relative x coordinate.
+    /// @param y The world relative y coordinate, the maximum supported range is from 2^23 - 1 to -2^23
+    /// @param z The world or chunk relative z coordinate.
+    /// @return A packed integer that uniquely identifies these coords in a chunk.
+    public static int packChunkRelativeCoords(int x, @Range(from = -8_388_608, to = 8_388_607) int y, int z) {
         return x & 0xF // mask x and z with 0xF (15) to ensure they are within range
             | (z & 0xF) << 4 // z is put into the next 4 bits
             | (y & 0xFFFFFF) << 8; // and y is put into the remaining 24 bits after x and z

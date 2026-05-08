@@ -4,7 +4,7 @@ import au.lupine.hopplet.Hopplet;
 import au.lupine.hopplet.filter.context.FilterContext;
 import au.lupine.hopplet.filter.context.ItemEntityContext;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
-import au.lupine.hopplet.filter.function.Function;
+import au.lupine.hopplet.filter.function.Matcher;
 import au.lupine.hopplet.util.Either;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.translation.Argument;
@@ -13,12 +13,10 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NonNull;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public final class ThrowerFunction implements Function<Set<Either<UUID, String>>> {
+public final class ThrowerFunction implements Matcher<Either<UUID, String>> {
 
     @Override
     public @NonNull String name() {
@@ -41,52 +39,34 @@ public final class ThrowerFunction implements Function<Set<Either<UUID, String>>
     }
 
     @Override
-    public @NonNull Set<Either<UUID, String>> compile(@NonNull List<String> arguments) throws FilterCompileException {
-        argsRequired(arguments);
-
-        final Set<Either<UUID, String>> eithers = new HashSet<>();
-
-        for (final String argument : arguments) {
-            if (argument.length() == 36) {
-                try {
-                    eithers.add(Either.left(UUID.fromString(argument)));
-                    continue;
-                } catch (IllegalArgumentException ignored) {}
-            }
-
-            if (isReasonablePlayerName(argument)) {
-                eithers.add(Either.right(argument));
-                continue;
-            }
-
-            throw new FilterCompileException(
-                Component.translatable(
-                    "hopplet.filter.function.thrower.compilation.exception.invalid_name",
-                    Argument.string("input", argument)
-                )
-            );
+    public @NonNull Either<UUID, String> parse(@NonNull String argument) throws FilterCompileException {
+        if (argument.length() == 36) {
+            try {
+                return Either.left(UUID.fromString(argument));
+            } catch (IllegalArgumentException ignored) {}
         }
 
-        return eithers;
+        if (isReasonablePlayerName(argument)) return Either.right(argument);
+
+        throw new FilterCompileException(
+            Component.translatable(
+                "hopplet.filter.function.thrower.compilation.exception.invalid_name",
+                Argument.string("input", argument)
+            )
+        );
     }
 
     @Override
-    public boolean test(@NonNull FilterContext context, @NonNull Set<Either<UUID, String>> arguments) {
+    public boolean matches(@NonNull FilterContext context, @NonNull Either<UUID, String> either) {
         if (!(context instanceof ItemEntityContext ctx)) return false;
 
         UUID thrower = ctx.item().getThrower();
         if (thrower == null) return false;
 
-        for (Either<UUID, String> argument : arguments) {
-            if (argument.map(thrower::equals, name -> {
-                final OfflinePlayer player = Bukkit.getOfflinePlayerIfCached(name);
-                return player != null && thrower.equals(player.getUniqueId());
-            })) {
-                return true;
-            }
-        }
-
-        return false;
+        return either.map(thrower::equals, name -> {
+            OfflinePlayer player = Bukkit.getOfflinePlayerIfCached(name);
+            return player != null && thrower.equals(player.getUniqueId());
+        });
     }
 
     // Taken from paper inside net/minecraft/util/StringUtil

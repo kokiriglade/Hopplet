@@ -4,6 +4,7 @@ import au.lupine.hopplet.Hopplet;
 import au.lupine.hopplet.filter.context.FilterContext;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import au.lupine.hopplet.filter.function.Function;
+import au.lupine.hopplet.filter.function.Matcher;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.translation.Argument;
 import org.bukkit.Bukkit;
@@ -13,11 +14,9 @@ import org.bukkit.Tag;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NonNull;
 
-import java.util.EnumSet;
-import java.util.List;
 import java.util.Set;
 
-public final class TagFunction implements Function<Set<Material>> {
+public final class TagFunction implements Matcher<Set<Material>> {
 
     @Override
     public @NonNull String name() {
@@ -40,42 +39,28 @@ public final class TagFunction implements Function<Set<Material>> {
     }
 
     @Override
-    public @NonNull Set<Material> compile(@NonNull List<String> arguments) throws FilterCompileException {
-        argsRequired(arguments);
+    public @NonNull Set<Material> parse(@NonNull String argument) throws FilterCompileException {
+        NamespacedKey key = NamespacedKey.fromString(argument.toLowerCase());
 
-        Set<Material> materials = EnumSet.noneOf(Material.class);
-        for (String argument : arguments) {
-            NamespacedKey key = NamespacedKey.fromString(argument.toLowerCase());
+        Function.checkKey(key, argument);
 
-            if (key == null) {
-                throw new FilterCompileException(
-                    Component.translatable(
-                        "hopplet.filter.function.default.compilation.exception.invalid_key",
-                        Argument.string("input", argument)
-                    )
-                );
-            }
+        Tag<Material> tag = Bukkit.getTag(Tag.REGISTRY_ITEMS, key, Material.class);
+        if (tag == null) tag = Bukkit.getTag(Tag.REGISTRY_BLOCKS, key, Material.class);
 
-            Tag<Material> tag = Bukkit.getTag(Tag.REGISTRY_ITEMS, key, Material.class);
-            if (tag == null) tag = Bukkit.getTag(Tag.REGISTRY_BLOCKS, key, Material.class);
-
-            if (tag == null) {
-                throw new FilterCompileException(
-                    Component.translatable(
-                        "hopplet.filter.function.tag.compilation.exception.unknown_tag",
-                        Argument.string("input", argument)
-                    )
-                );
-            }
-
-            materials.addAll(tag.getValues());
+        if (tag == null) {
+            throw new FilterCompileException(
+                Component.translatable(
+                    "hopplet.filter.function.tag.compilation.exception.unknown_tag",
+                    Argument.string("input", argument)
+                )
+            );
         }
 
-        return materials;
+        return tag.getValues();
     }
 
     @Override
-    public boolean test(@NonNull FilterContext context, @NonNull Set<Material> materials) {
+    public boolean matches(@NonNull FilterContext context, @NonNull Set<Material> materials) {
         return materials.contains(context.stack().getType());
     }
 }

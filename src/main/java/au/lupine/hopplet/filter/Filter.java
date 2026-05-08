@@ -1,6 +1,6 @@
 package au.lupine.hopplet.filter;
 
-import au.lupine.hopplet.filter.compiler.FilterCompiler;
+import au.lupine.hopplet.filter.compiler.Compiler;
 import au.lupine.hopplet.filter.compiler.Node;
 import au.lupine.hopplet.filter.context.FilterContext;
 import au.lupine.hopplet.filter.context.ItemStackContext;
@@ -19,7 +19,9 @@ import org.jspecify.annotations.Nullable;
 
 public final class Filter {
 
-    /// This style must be present for a filter to be valid.
+    /// This style must be present for a filter on a hopper to be valid.
+    /// Third-party users of Hopplet's filters can use it, but it's not necessary.
+    /// Not using it will break {@link #of(Component)}.
     public static Style style = Style.style(NamedTextColor.GOLD);
 
     private final @NonNull Node root;
@@ -34,20 +36,30 @@ public final class Filter {
         return raw;
     }
 
+    public @NonNull Component component() {
+        return Component.text(raw, style);
+    }
+
+    /// @return `true` if the specified component "looks like" a filter.
+    /// This doesn't mean it will successfully compile, but that it has the correct styling.
+    public static boolean looksLikeFilter(@NonNull Component component) {
+        return component.style().equals(style);
+    }
+
     public static @Nullable Filter of(@NonNull String raw) throws FilterCompileException {
-        return FilterCompiler.compile(raw);
+        return Compiler.compile(raw);
     }
 
     public static @Nullable Filter of(@Nullable Component component) throws FilterCompileException {
-        return FilterCompiler.compile(component);
+        return Compiler.compile(component);
     }
 
     public static @Nullable Filter of(@NonNull Hopper hopper) throws FilterCompileException {
-        return FilterCompiler.compile(hopper);
+        return Compiler.compile(hopper);
     }
 
     public static @Nullable Filter of(@NonNull HopperMinecart hopper) throws FilterCompileException {
-        return FilterCompiler.compile(hopper);
+        return Compiler.compile(hopper);
     }
 
     /// @return `true` if the filter accepts the specified {@link FilterContext}.

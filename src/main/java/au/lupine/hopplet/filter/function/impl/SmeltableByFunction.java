@@ -3,7 +3,7 @@ package au.lupine.hopplet.filter.function.impl;
 import au.lupine.hopplet.Hopplet;
 import au.lupine.hopplet.filter.context.FilterContext;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
-import au.lupine.hopplet.filter.function.Function;
+import au.lupine.hopplet.filter.function.Matcher;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.translation.Argument;
 import org.bukkit.Bukkit;
@@ -13,11 +13,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NonNull;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-public final class SmeltableByFunction implements Function<Set<InventoryType>> {
+public final class SmeltableByFunction implements Matcher<InventoryType> {
 
     private static final @NonNull Set<InventoryType> FURNACE_TYPES = Set.of(
         InventoryType.BLAST_FURNACE,
@@ -55,35 +53,28 @@ public final class SmeltableByFunction implements Function<Set<InventoryType>> {
     }
 
     @Override
-    public @NonNull Set<InventoryType> compile(@NonNull List<String> arguments) throws FilterCompileException {
-        if (arguments.isEmpty()) return FURNACE_TYPES;
+    public @NonNull InventoryType parse(@NonNull String argument) throws FilterCompileException {
+        try {
+            InventoryType type = InventoryType.valueOf(argument.toUpperCase());
+            if (!FURNACE_TYPES.contains(type)) throw new IllegalArgumentException();
 
-        Set<InventoryType> types = new HashSet<>();
-        for (String argument : arguments) {
-            try {
-                InventoryType type = InventoryType.valueOf(argument.toUpperCase());
-                if (!FURNACE_TYPES.contains(type)) throw new IllegalArgumentException();
-
-                types.add(type);
-            } catch (IllegalArgumentException e) {
-                throw new FilterCompileException(
-                    Component.translatable(
-                        "hopplet.filter.function.smeltable_by.compilation.exception.unknown_furnace_type",
-                        Argument.string("input", argument)
-                    )
-                );
-            }
+            return type;
+        } catch (IllegalArgumentException e) {
+            throw new FilterCompileException(
+                Component.translatable(
+                    "hopplet.filter.function.smeltable_by.compilation.exception.unknown_furnace_type",
+                    Argument.string("input", argument)
+                )
+            );
         }
-
-        return types;
     }
 
     @Override
-    public boolean test(@NonNull FilterContext context, @NonNull Set<InventoryType> furnaces) {
+    public boolean matches(@NonNull FilterContext context, @NonNull InventoryType argument) {
         ItemStack stack = context.stack();
 
         for (FurnaceInventory inventory : FURNACE_INVENTORIES) {
-            if (!furnaces.contains(inventory.getType())) continue;
+            if (inventory.getType() != argument) continue;
 
             if (inventory.canSmelt(stack)) return true;
         }

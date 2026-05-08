@@ -20,8 +20,6 @@ public interface Function<ArgumentType> {
 
     @NonNull Set<Function<?>> FUNCTIONS = new CopyOnWriteArraySet<>();
 
-    @NonNull NoArguments NO_ARGUMENTS = new NoArguments();
-
     /// @return The name of this function in `snake_case`.
     @NonNull String name();
 
@@ -113,29 +111,14 @@ public interface Function<ArgumentType> {
         return null;
     }
 
-    default void argsRequired(@NonNull List<String> arguments) {
-        if (arguments.isEmpty()) {
+    static void checkKey(@Nullable NamespacedKey key, @NonNull String argument) {
+        if (key == null) {
             throw new FilterCompileException(
                 Component.translatable(
-                    "hopplet.filter.function.default.compilation.exception.no_arguments_provided",
-                    Argument.string("name", name())
+                    "hopplet.filter.function.default.compilation.exception.invalid_key",
+                    Argument.string("input", argument)
                 )
             );
         }
-    }
-
-    default void argsNotRequired(@NonNull List<String> arguments) {
-        if (!arguments.isEmpty()) {
-            throw new FilterCompileException(
-                Component.translatable(
-                    "hopplet.filter.function.default.compilation.exception.arguments_not_required",
-                    Argument.string("name", name())
-                )
-            );
-        }
-    }
-
-    final class NoArguments {
-        private NoArguments() {}
     }
 }

@@ -3,17 +3,15 @@ package au.lupine.hopplet.filter.function.impl;
 import au.lupine.hopplet.Hopplet;
 import au.lupine.hopplet.filter.context.FilterContext;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
-import au.lupine.hopplet.filter.function.Function;
+import au.lupine.hopplet.filter.function.Matcher;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NonNull;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-public final class DisplayNameStartsWithFunction implements Function<Set<String>> {
+public final class DisplayNameStartsWithFunction implements Matcher<String> {
 
     @Override
     public @NonNull String name() {
@@ -36,20 +34,13 @@ public final class DisplayNameStartsWithFunction implements Function<Set<String>
     }
 
     @Override
-    public @NonNull Set<String> compile(@NonNull List<String> arguments) throws FilterCompileException {
-        argsRequired(arguments);
-
-        return new HashSet<>(arguments);
+    public @NonNull String parse(@NonNull String argument) throws FilterCompileException {
+        return argument;
     }
 
     @Override
-    public boolean test(@NonNull FilterContext context, @NonNull Set<String> arguments) {
-        final String name = PlainTextComponentSerializer.plainText().serialize(context.stack().effectiveName());
-
-        for (String argument : arguments) {
-            if (name.startsWith(argument)) return true;
-        }
-
-        return false;
+    public boolean matches(@NonNull FilterContext context, @NonNull String argument) {
+        String name = PlainTextComponentSerializer.plainText().serialize(context.stack().effectiveName());
+        return name.startsWith(argument);
     }
 }

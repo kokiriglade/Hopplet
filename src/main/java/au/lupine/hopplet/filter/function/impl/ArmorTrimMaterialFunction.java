@@ -4,6 +4,7 @@ import au.lupine.hopplet.Hopplet;
 import au.lupine.hopplet.filter.context.FilterContext;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import au.lupine.hopplet.filter.function.Function;
+import au.lupine.hopplet.filter.function.Matcher;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import net.kyori.adventure.text.Component;
@@ -16,11 +17,11 @@ import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NonNull;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-public final class ArmorTrimMaterialFunction implements Function<Set<TrimMaterial>> {
+public final class ArmorTrimMaterialFunction implements Matcher<TrimMaterial> {
+
+    private static final Registry<TrimMaterial> TRIM_MATERIAL_REGISTRY = RegistryAccess.registryAccess().getRegistry(RegistryKey.TRIM_MATERIAL);
 
     @Override
     public @NonNull String name() {
@@ -43,47 +44,31 @@ public final class ArmorTrimMaterialFunction implements Function<Set<TrimMateria
     }
 
     @Override
-    public @NonNull Set<TrimMaterial> compile(@NonNull List<String> arguments) throws FilterCompileException {
-        argsRequired(arguments);
+    public @NonNull TrimMaterial parse(@NonNull String argument) throws FilterCompileException {
+        NamespacedKey key = NamespacedKey.fromString(argument.toLowerCase());
 
-        Registry<TrimMaterial> registry = RegistryAccess.registryAccess().getRegistry(RegistryKey.TRIM_MATERIAL);
-        Set<TrimMaterial> materials = new HashSet<>();
+        Function.checkKey(key, argument);
 
-        for (String argument : arguments) {
-            NamespacedKey key = NamespacedKey.fromString(argument.toLowerCase());
-
-            if (key == null) {
-                throw new FilterCompileException(
-                    Component.translatable(
-                        "hopplet.filter.function.default.compilation.exception.invalid_key",
-                        Argument.string("input", argument)
-                    )
-                );
-            }
-
-            TrimMaterial material = registry.get(key);
-            if (material == null) {
-                throw new FilterCompileException(
-                    Component.translatable(
-                        "hopplet.filter.function.armor_trim_material.compilation.exception.unknown_trim_material",
-                        Argument.string("input", argument)
-                    )
-                );
-            }
-
-            materials.add(material);
+        TrimMaterial material = TRIM_MATERIAL_REGISTRY.get(key);
+        if (material == null) {
+            throw new FilterCompileException(
+                Component.translatable(
+                    "hopplet.filter.function.armor_trim_material.compilation.exception.unknown_trim_material",
+                    Argument.string("input", argument)
+                )
+            );
         }
 
-        return materials;
+        return material;
     }
 
     @Override
-    public boolean test(@NonNull FilterContext context, @NonNull Set<TrimMaterial> materials) {
+    public boolean matches(@NonNull FilterContext context, @NonNull TrimMaterial material) {
         if (!(context.stack().getItemMeta() instanceof ArmorMeta meta)) return false;
 
         ArmorTrim trim = meta.getTrim();
         if (trim == null) return false;
 
-        return materials.contains(trim.getMaterial());
+        return trim.getMaterial().equals(material);
     }
 }

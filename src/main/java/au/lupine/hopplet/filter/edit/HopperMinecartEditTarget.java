@@ -2,7 +2,7 @@ package au.lupine.hopplet.filter.edit;
 
 import au.lupine.hopplet.Hopplet;
 import au.lupine.hopplet.filter.Filter;
-import au.lupine.hopplet.filter.cache.FilterCache;
+import au.lupine.hopplet.filter.cache.Cache;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -42,13 +42,13 @@ public final class HopperMinecartEditTarget implements EditTarget {
         instance.getServer().getRegionScheduler().run(instance, hopper.getLocation(), task -> {
             if (!hopper.isValid()) return;
 
-            FilterCache.invalidate(hopper);
+            Cache.invalidate(hopper);
 
             if (input.isBlank()) {
                 hopper.customName(null);
             } else {
                 hopper.customName(Component.text(input, Filter.style));
-                if (filter != null) FilterCache.cache(hopper, filter);
+                if (filter != null) Cache.cache(hopper, filter);
             }
         });
     }

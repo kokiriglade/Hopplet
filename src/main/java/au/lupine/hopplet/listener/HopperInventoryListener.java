@@ -2,7 +2,7 @@ package au.lupine.hopplet.listener;
 
 import au.lupine.hopplet.Hopplet;
 import au.lupine.hopplet.filter.Filter;
-import au.lupine.hopplet.filter.cache.FilterCache;
+import au.lupine.hopplet.filter.cache.Cache;
 import au.lupine.hopplet.filter.context.FilterContext;
 import au.lupine.hopplet.filter.context.HopperInventoryTransferContext;
 import au.lupine.hopplet.filter.context.HopperPickupItemContext;
@@ -33,8 +33,8 @@ public final class HopperInventoryListener implements Listener {
         Filter filter;
         try {
             filter = switch (holder) {
-                case Hopper hopper -> FilterCache.getOrCompile(hopper);
-                case HopperMinecart hopper -> FilterCache.getOrCompile(hopper);
+                case Hopper hopper -> Cache.getOrCompile(hopper);
+                case HopperMinecart hopper -> Cache.getOrCompile(hopper);
                 default -> null;
             };
         } catch (FilterCompileException e) {
@@ -61,7 +61,7 @@ public final class HopperInventoryListener implements Listener {
 
         Filter alternativeFilter;
         try {
-            alternativeFilter = FilterCache.getOrCompile(alternative);
+            alternativeFilter = Cache.getOrCompile(alternative);
         } catch (FilterCompileException e) {
             return;
         }
@@ -82,8 +82,8 @@ public final class HopperInventoryListener implements Listener {
         Filter filter;
         try {
             filter = switch (holder) {
-                case Hopper hopper -> FilterCache.getOrCompile(hopper);
-                case HopperMinecart hopper -> FilterCache.getOrCompile(hopper);
+                case Hopper hopper -> Cache.getOrCompile(hopper);
+                case HopperMinecart hopper -> Cache.getOrCompile(hopper);
                 default -> null;
             };
         } catch (FilterCompileException e) {

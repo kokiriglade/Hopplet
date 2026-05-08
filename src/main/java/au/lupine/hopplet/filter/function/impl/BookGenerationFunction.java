@@ -3,7 +3,7 @@ package au.lupine.hopplet.filter.function.impl;
 import au.lupine.hopplet.Hopplet;
 import au.lupine.hopplet.filter.context.FilterContext;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
-import au.lupine.hopplet.filter.function.Function;
+import au.lupine.hopplet.filter.function.Matcher;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.translation.Argument;
 import org.bukkit.inventory.ItemStack;
@@ -11,11 +11,9 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NonNull;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-public final class BookGenerationFunction implements Function<Set<BookMeta.Generation>> {
+public final class BookGenerationFunction implements Matcher<BookMeta.Generation> {
 
     @Override
     public @NonNull String name() {
@@ -38,35 +36,27 @@ public final class BookGenerationFunction implements Function<Set<BookMeta.Gener
     }
 
     @Override
-    public @NonNull Set<BookMeta.Generation> compile(@NonNull List<String> arguments) throws FilterCompileException {
-        argsRequired(arguments);
-
-        Set<BookMeta.Generation> generations = new HashSet<>();
-        for (String argument : arguments) {
-            try {
-                BookMeta.Generation generation = BookMeta.Generation.valueOf(argument.toUpperCase());
-                generations.add(generation);
-            } catch (IllegalArgumentException e) {
-                throw new FilterCompileException(
-                    Component.translatable(
-                        "hopplet.filter.function.book_generation.compilation.exception.unknown_book_generation",
-                        Argument.string("input", argument)
-                    )
-                );
-            }
+    public BookMeta.@NonNull Generation parse(@NonNull String argument) throws FilterCompileException {
+        try {
+            return BookMeta.Generation.valueOf(argument.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new FilterCompileException(
+                Component.translatable(
+                    "hopplet.filter.function.book_generation.compilation.exception.unknown_book_generation",
+                    Argument.string("input", argument)
+                )
+            );
         }
-
-        return generations;
     }
 
     @Override
-    public boolean test(@NonNull FilterContext context, @NonNull Set<BookMeta.Generation> generations) {
+    public boolean matches(@NonNull FilterContext context, BookMeta.@NonNull Generation argument) {
         ItemStack item = context.stack();
         if (!(item.getItemMeta() instanceof BookMeta meta)) return false;
 
         BookMeta.Generation generation = meta.getGeneration();
         if (generation == null) generation = BookMeta.Generation.ORIGINAL;
 
-        return generations.contains(generation);
+        return generation.equals(argument);
     }
 }

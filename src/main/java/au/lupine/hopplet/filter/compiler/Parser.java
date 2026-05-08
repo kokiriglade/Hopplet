@@ -1,7 +1,7 @@
 package au.lupine.hopplet.filter.compiler;
 
-import au.lupine.hopplet.filter.function.Function;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
+import au.lupine.hopplet.filter.function.Function;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.translation.Argument;
 import org.jspecify.annotations.NonNull;
