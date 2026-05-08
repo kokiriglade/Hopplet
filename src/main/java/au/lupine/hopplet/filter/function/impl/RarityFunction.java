@@ -11,24 +11,17 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NonNull;
 
-import java.util.Set;
-
 // This function is broken, it seems a lot or all of rarity is handled client side?
-public final class ItemRarityFunction implements Matcher<ItemRarity> {
+public final class RarityFunction implements Matcher<ItemRarity> {
 
     @Override
     public @NonNull String name() {
-        return "item_rarity";
-    }
-
-    @Override
-    public @NonNull Set<String> aliases() {
-        return Set.of("rarity");
+        return "rarity";
     }
 
     @Override
     public @NonNull Component description() {
-        return Component.translatable("hopplet.filter.function.item_rarity.description");
+        return Component.translatable("hopplet.filter.function.rarity.description");
     }
 
     @Override
@@ -43,7 +36,7 @@ public final class ItemRarityFunction implements Matcher<ItemRarity> {
         } catch (IllegalArgumentException e) {
             throw new FilterCompileException(
                 Component.translatable(
-                    "hopplet.filter.function.item_rarity.compilation.exception.unknown_item_rarity",
+                    "hopplet.filter.function.rarity.compilation.exception.unknown_item_rarity",
                     Argument.string("input", name())
                 )
             );

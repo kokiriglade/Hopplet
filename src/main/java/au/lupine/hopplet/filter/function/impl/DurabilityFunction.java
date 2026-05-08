@@ -14,24 +14,21 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.Set;
 
-public final class ItemDurabilityFunction implements Matcher<ItemDurabilityFunction.Argument> {
+public final class DurabilityFunction implements Matcher<DurabilityFunction.Argument> {
 
     @Override
     public @NonNull String name() {
-        return "item_durability";
+        return "durability";
     }
 
     @Override
     public @NonNull Set<String> aliases() {
-        return Set.of(
-            "durability",
-            "dur"
-        );
+        return Set.of("dur");
     }
 
     @Override
     public @NonNull Component description() {
-        return Component.translatable("hopplet.filter.function.item_durability.description");
+        return Component.translatable("hopplet.filter.function.durability.description");
     }
 
     @Override
@@ -87,7 +84,7 @@ public final class ItemDurabilityFunction implements Matcher<ItemDurabilityFunct
         if (text.isEmpty()) {
             throw new FilterCompileException(
                 Component.translatable(
-                    "hopplet.filter.function.item_durability.compilation.exception.no_durability_specified",
+                    "hopplet.filter.function.durability.compilation.exception.no_durability_specified",
                     net.kyori.adventure.text.minimessage.translation.Argument.string("input", argument)
                 )
             );
@@ -99,7 +96,7 @@ public final class ItemDurabilityFunction implements Matcher<ItemDurabilityFunct
         } catch (NumberFormatException e) {
             throw new FilterCompileException(
                 Component.translatable(
-                    "hopplet.filter.function.item_durability.compilation.exception.invalid_durability",
+                    "hopplet.filter.function.durability.compilation.exception.invalid_durability",
                     net.kyori.adventure.text.minimessage.translation.Argument.string("input", argument)
                 )
             );
@@ -108,7 +105,7 @@ public final class ItemDurabilityFunction implements Matcher<ItemDurabilityFunct
         if (durability < 0) {
             throw new FilterCompileException(
                 Component.translatable(
-                    "hopplet.filter.function.item_durability.compilation.exception.less_than_zero",
+                    "hopplet.filter.function.durability.compilation.exception.less_than_zero",
                     net.kyori.adventure.text.minimessage.translation.Argument.string("input", argument)
                 )
             );
@@ -117,7 +114,7 @@ public final class ItemDurabilityFunction implements Matcher<ItemDurabilityFunct
         if (durability > 100) {
             throw new FilterCompileException(
                 Component.translatable(
-                    "hopplet.filter.function.item_durability.compilation.exception.greater_than_one_hundred",
+                    "hopplet.filter.function.durability.compilation.exception.greater_than_one_hundred",
                     net.kyori.adventure.text.minimessage.translation.Argument.string("input", argument)
                 )
             );
