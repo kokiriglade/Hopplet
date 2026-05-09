@@ -93,8 +93,6 @@ public final class PotionEffectFunction implements Matcher<Pair<PotionEffectType
         PotionEffectType specified = pair.left();
         Comparator comparator = pair.right();
 
-        System.out.println(specified.getKey().getKey() + comparator);
-
         for (PotionEffect effect : effects) {
             if (effect.getType() != specified) continue;
 
