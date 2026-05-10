@@ -11,6 +11,7 @@ import au.lupine.hopplet.util.HopperRouting;
 import org.bukkit.block.Hopper;
 import org.bukkit.entity.minecart.HopperMinecart;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
@@ -71,7 +72,7 @@ public final class HopperInventoryListener implements Listener {
         if (alternativeFilter.test(new HopperInventoryTransferContext(item, source, alternative.getInventory()))) event.setCancelled(true);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void on(@NonNull InventoryPickupItemEvent event) {
         Inventory inventory = event.getInventory();
         if (!inventory.getType().equals(InventoryType.HOPPER)) return;
