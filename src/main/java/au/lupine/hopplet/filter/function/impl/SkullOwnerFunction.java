@@ -2,36 +2,36 @@ package au.lupine.hopplet.filter.function.impl;
 
 import au.lupine.hopplet.Hopplet;
 import au.lupine.hopplet.filter.context.Context;
-import au.lupine.hopplet.filter.context.ItemEntityContext;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import au.lupine.hopplet.filter.function.Function;
 import au.lupine.hopplet.filter.function.Matcher;
 import au.lupine.hopplet.util.Either;
+import com.destroystokyo.paper.profile.PlayerProfile;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.translation.Argument;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Set;
 import java.util.UUID;
 
-public final class ThrowerFunction implements Matcher<Either<UUID, String>> {
+public final class SkullOwnerFunction implements Matcher<Either<UUID, String>> {
 
     @Override
     public @NonNull String name() {
-        return "thrower";
+        return "skull_owner";
     }
 
     @Override
     public @NonNull Set<String> aliases() {
-        return Set.of("thrown_by");
+        return Set.of("head_owner");
     }
 
     @Override
     public @NonNull Component description() {
-        return Component.translatable("hopplet.filter.function.thrower.description");
+        return Component.translatable("hopplet.filter.function.skull_owner.description");
     }
 
     @Override
@@ -46,14 +46,27 @@ public final class ThrowerFunction implements Matcher<Either<UUID, String>> {
 
     @Override
     public boolean matches(@NonNull Context context, @NonNull Either<UUID, String> either) {
-        if (!(context instanceof ItemEntityContext ctx)) return false;
+        if (!(context.stack().getItemMeta() instanceof SkullMeta meta)) return false;
 
-        UUID thrower = ctx.item().getThrower();
-        if (thrower == null) return false;
+        PlayerProfile profile = meta.getPlayerProfile();
+        if (profile == null) return false;
 
-        return either.map(thrower::equals, name -> {
-            OfflinePlayer player = Bukkit.getOfflinePlayerIfCached(name);
-            return player != null && thrower.equals(player.getUniqueId());
-        });
+        UUID profileUUID = profile.getId();
+        String profileName = profile.getName();
+        if (profileUUID == null && profileName == null) return false;
+
+        return either.map(
+            uuid -> uuid.equals(profileUUID),
+            name -> {
+                if (name.equals(profileName)) return true;
+
+                if (profileUUID != null) {
+                    OfflinePlayer player = Bukkit.getOfflinePlayerIfCached(name);
+                    return player != null && profileUUID.equals(player.getUniqueId());
+                }
+
+                return false;
+            }
+        );
     }
 }

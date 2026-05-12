@@ -9,6 +9,7 @@ import au.lupine.hopplet.filter.function.impl.*;
 import au.lupine.hopplet.listener.FilterCacheListener;
 import au.lupine.hopplet.listener.FilterEditListener;
 import au.lupine.hopplet.listener.HopperInventoryListener;
+import au.lupine.hopplet.listener.ItemCraftListener;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.jspecify.annotations.NonNull;
@@ -31,7 +32,13 @@ public final class Hopplet extends Plugin {
 
     @Override
     public void enable() {
-        // `enable` scope is confined to filtering functionality for now
+        Filter.style = MiniMessage.miniMessage().deserialize(
+            config().root()
+                .node("filter", "magic_style")
+                .getString("<gold>")
+        ).style();
+
+        // `enable` scope is confined to filtering functionality for now.
         if (config().root().node("enable").getBoolean(true)) {
             listeners(
                 new FilterCacheListener(),
@@ -39,14 +46,9 @@ public final class Hopplet extends Plugin {
             );
         }
 
-        Filter.style = MiniMessage.miniMessage().deserialize(
-            config().root()
-                .node("filter", "magic_style")
-                .getString("<gold>")
-        ).style();
-
         listeners(
-            new FilterEditListener()
+            new FilterEditListener(),
+            new ItemCraftListener()
         );
 
         Function.register(
@@ -76,6 +78,8 @@ public final class Hopplet extends Plugin {
             new PotionDurationFunction(),
             new PotionEffectFunction(),
             new RarityFunction(),
+            new SkullOwnerFunction(),
+            new SkullTextureFunction(),
             new SmeltableByFunction(),
             new SourceInventoryTypeFunction(),
             new TagFunction(),

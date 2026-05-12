@@ -3,6 +3,7 @@ package au.lupine.hopplet.filter.function;
 import au.lupine.hopplet.Hopplet;
 import au.lupine.hopplet.filter.context.Context;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
+import au.lupine.hopplet.util.Either;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.translation.Argument;
 import org.bukkit.NamespacedKey;
@@ -14,6 +15,7 @@ import org.spongepowered.configurate.serialize.SerializationException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public interface Function<ArgumentType> {
@@ -111,6 +113,8 @@ public interface Function<ArgumentType> {
         return null;
     }
 
+    // Function utilities that should probably have a better spot (inheritance?)
+
     static void checkKey(@Nullable NamespacedKey key, @NonNull String argument) {
         if (key == null) {
             throw new FilterCompileException(
@@ -120,5 +124,37 @@ public interface Function<ArgumentType> {
                 )
             );
         }
+    }
+
+    static @NonNull Either<UUID, String> playerEither(@NonNull String argument) {
+        if (argument.length() == 36) {
+            try {
+                return Either.left(UUID.fromString(argument));
+            } catch (IllegalArgumentException ignored) {}
+        }
+
+        if (isReasonablePlayerName(argument)) return Either.right(argument);
+
+        throw new FilterCompileException(
+            Component.translatable(
+                "hopplet.filter.function.default.compilation.exception.invalid_uuid_or_name",
+                Argument.string("input", argument)
+            )
+        );
+    }
+
+    // Taken from paper inside net/minecraft/util/StringUtil
+    // does create a small problem for servers using floodgate, the default prefix '.' is already considered reasonable, but directly integrating with its api and retrieving the prefix from that is also possible if wanted.
+    private static boolean isReasonablePlayerName(@NonNull String name) {
+        if (name.isEmpty() || name.length() > 16) return false;
+
+        for (int i = 0, len = name.length(); i < len; ++i) {
+            char c = name.charAt(i);
+            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || (c == '_' || c == '.')) continue;
+
+            return false;
+        }
+
+        return true;
     }
 }
