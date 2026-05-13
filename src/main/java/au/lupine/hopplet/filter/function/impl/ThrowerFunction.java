@@ -8,7 +8,6 @@ import au.lupine.hopplet.filter.function.Function;
 import au.lupine.hopplet.filter.function.Matcher;
 import au.lupine.hopplet.util.Either;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.translation.Argument;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
