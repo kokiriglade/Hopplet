@@ -27,7 +27,7 @@ tasks {
         jvmArgs("-Xms2G", "-Xmx2G", "-Dcom.mojang.eula.agree=true")
 
         downloadPlugins {
-            modrinth("bottlet", "alpha-0.1.2")
+            modrinth("bottlet", "alpha-0.1.3")
         }
     }
 
