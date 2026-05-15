@@ -103,6 +103,13 @@ public final class Hopplet extends Plugin {
                 "disable_hopper_on_compilation_error", true,
                 "edit", Map.of(
                     "dialog", Map.of(
+                        "title_text", "<gold><bold>Hopplet",
+                        "show_item", true,
+                        "show_credits", false,
+                        "show_documentation", true,
+                        "documentation_url", "https://github.com/jwkerr/Hopplet/wiki",
+                        "show_discord", true,
+                        "discord_url", "https://discord.lupine.au",
                         "max_input_length", 512
                     )
                 ),
