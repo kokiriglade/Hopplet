@@ -64,6 +64,7 @@ public final class Hopplet extends Plugin {
             new DurabilityFunction(),
             new EnchantmentFunction(),
             new HasArmorTrimFunction(),
+            new IsDamagedFunction(),
             new IsEdibleFunction(),
             new IsEnchantedFunction(),
             new IsFuelFunction(),
