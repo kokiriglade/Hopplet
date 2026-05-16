@@ -48,9 +48,14 @@ public final class HoppletCommand {
 
                     Entity entity = player.getTargetEntity(8, false);
                     if (entity instanceof HopperMinecart hopper) {
+                        if (!player.hasPermission("hopplet.edit.hopper_minecart")) {
+                            player.sendMessage(Component.translatable("hopplet.command.hopplet.edit.feedback.no_permission.hopper_minecart"));
+                            return 0;
+                        }
+
                         BlockBreakEvent bbe = new BlockBreakEvent(hopper.getLocation().getBlock(), player);
                         if (!bbe.callEvent()) {
-                            player.sendMessage(Component.translatable("hopplet.command.hopplet.edit.feedback.no_permission"));
+                            player.sendMessage(Component.translatable("hopplet.command.hopplet.edit.feedback.no_permission.blocked_by_plugin"));
                             return 0;
                         }
 
@@ -60,9 +65,14 @@ public final class HoppletCommand {
 
                     Block block = player.getTargetBlockExact(8);
                     if (block != null && block.getState() instanceof Hopper hopper) {
+                        if (!player.hasPermission("hopplet.edit.hopper")) {
+                            player.sendMessage(Component.translatable("hopplet.command.hopplet.edit.feedback.no_permission.hopper"));
+                            return 0;
+                        }
+
                         BlockBreakEvent bbe = new BlockBreakEvent(hopper.getBlock(), player);
                         if (!bbe.callEvent()) {
-                            player.sendMessage(Component.translatable("hopplet.command.hopplet.edit.feedback.no_permission"));
+                            player.sendMessage(Component.translatable("hopplet.command.hopplet.edit.feedback.no_permission.blocked_by_plugin"));
                             return 0;
                         }
 

@@ -21,7 +21,7 @@ public final class FilterEditListener implements Listener {
     @EventHandler
     public void on(@NonNull PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        if (!player.hasPermission("hopplet.dialog.edit_filter.use")) return;
+        if (!player.hasPermission("hopplet.edit.hopper")) return;
 
         if (!event.getAction().isRightClick()) return;
 
@@ -48,7 +48,7 @@ public final class FilterEditListener implements Listener {
     @EventHandler
     public void on(@NonNull PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
-        if (!player.hasPermission("hopplet.dialog.edit_filter.use")) return;
+        if (!player.hasPermission("hopplet.edit.hopper_minecart")) return;
 
         if (!(event.getRightClicked() instanceof HopperMinecart hopper)) return;
 

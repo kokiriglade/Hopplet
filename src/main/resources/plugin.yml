@@ -22,8 +22,12 @@ softdepend:
   - Towny
 
 permissions:
-  hopplet.dialog.edit_filter.use:
-    description: Grants permission to open the filter editing dialog.
+  hopplet.edit.hopper:
+    description: Grants permission to edit the filter of hoppers.
+    default: true
+
+  hopplet.edit.hopper_minecart:
+    description: Grants permission to edit the filter of hopper minecarts.
     default: true
 
   hopplet.command.hopplet:
