@@ -2,6 +2,7 @@ package au.lupine.hopplet;
 
 import au.lupine.hopplet.base.Plugin;
 import au.lupine.hopplet.command.HoppletCommand;
+import au.lupine.hopplet.event.HoppletLoadedEvent;
 import au.lupine.hopplet.filter.Filter;
 import au.lupine.hopplet.filter.cache.Cache;
 import au.lupine.hopplet.filter.function.Function;
@@ -44,6 +45,8 @@ public final class Hopplet extends Plugin {
                 new FilterCacheListener(),
                 new HopperInventoryListener()
             );
+        } else {
+            getLogger().warning("Hopplet is not enabled in config. Items will not be filtered. You can ignore this if you intentionally disabled it.");
         }
 
         listeners(
@@ -96,6 +99,9 @@ public final class Hopplet extends Plugin {
             new ThrowerNationFunction(),
             new ThrowerTownFunction()
         );
+
+        HoppletLoadedEvent loaded = new HoppletLoadedEvent();
+        loaded.callEvent();
     }
 
     @Override

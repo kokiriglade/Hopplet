@@ -32,6 +32,10 @@ public final class Filter {
         this.raw = raw;
     }
 
+    public @NonNull Node root() {
+        return root;
+    }
+
     public @NonNull String raw() {
         return raw;
     }

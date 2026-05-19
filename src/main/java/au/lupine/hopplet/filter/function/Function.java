@@ -1,6 +1,8 @@
 package au.lupine.hopplet.filter.function;
 
 import au.lupine.hopplet.Hopplet;
+import au.lupine.hopplet.event.FunctionRegisteredEvent;
+import au.lupine.hopplet.event.PreFunctionRegisterEvent;
 import au.lupine.hopplet.filter.context.Context;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import au.lupine.hopplet.util.Either;
@@ -90,12 +92,20 @@ public interface Function<ArgumentType> {
                 if(other.key().equals(function.key())) continue outer;
             }
 
+            PreFunctionRegisterEvent event = new PreFunctionRegisterEvent(function);
+            if (!event.callEvent()) continue;
+
+            Hopplet.instance().getLogger().info("Registering function: " + function.key());
+
             FUNCTIONS.add(function);
+
+            new FunctionRegisteredEvent(function).callEvent();
         }
     }
 
     static void unregister(@NonNull Function<?>... functions) {
         for (Function<?> function : functions) {
+            Hopplet.instance().getLogger().info("Unregistering function: " + function.key());
             FUNCTIONS.remove(function);
         }
     }
