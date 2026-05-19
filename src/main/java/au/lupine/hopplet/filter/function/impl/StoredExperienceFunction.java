@@ -43,6 +43,11 @@ public final class StoredExperienceFunction implements Matcher<Comparator> {
     }
 
     @Override
+    public @NonNull String namespace() {
+        return "bottlet";
+    }
+
+    @Override
     public boolean disabled() {
         return !Hopplet.instance().getServer()
             .getPluginManager()

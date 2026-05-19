@@ -92,8 +92,8 @@ public final class Hopplet extends Plugin {
             new StoredExperienceFunction(),
             new TagFunction(),
             new ThrowerFunction(),
-            new ThrowerTownyNationFunction(),
-            new ThrowerTownyTownFunction()
+            new ThrowerNationFunction(),
+            new ThrowerTownFunction()
         );
     }
 

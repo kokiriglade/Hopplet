@@ -41,6 +41,10 @@ public interface Function<ArgumentType> {
     /// @return The plugin that owns this function.
     @NonNull Plugin plugin();
 
+    default @NonNull String namespace() {
+        return plugin().namespace();
+    }
+
     @NonNull ArgumentType compile(@NonNull List<String> arguments) throws FilterCompileException;
 
     boolean test(@NonNull Context context, @NonNull ArgumentType compiled);
@@ -66,14 +70,14 @@ public interface Function<ArgumentType> {
     }
 
     default @NonNull NamespacedKey key() {
-        return new NamespacedKey(plugin(), name());
+        return new NamespacedKey(namespace(), name());
     }
 
     default @NonNull Set<NamespacedKey> keys() {
         Set<NamespacedKey> keys = new HashSet<>();
         keys.add(key());
         for (String alias : aliases()) {
-            keys.add(new NamespacedKey(plugin(), alias));
+            keys.add(new NamespacedKey(namespace(), alias));
         }
         return keys;
     }
