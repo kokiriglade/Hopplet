@@ -57,6 +57,7 @@ public final class Hopplet extends Plugin {
             new ArmorTrimPatternFunction(),
             new BookAuthorFunction(),
             new BookGenerationFunction(),
+            new BookTitleFunction(),
             new DisplayNameContainsFunction(),
             new DisplayNameEndsWithFunction(),
             new DisplayNameFunction(),
