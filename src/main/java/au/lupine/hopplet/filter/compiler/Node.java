@@ -1,5 +1,7 @@
 package au.lupine.hopplet.filter.compiler;
 
+import au.lupine.hopplet.event.FunctionTestedEvent;
+import au.lupine.hopplet.event.PreFunctionTestEvent;
 import au.lupine.hopplet.filter.context.Context;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import au.lupine.hopplet.filter.function.Function;
@@ -13,7 +15,13 @@ public sealed interface Node {
 
     record Call<ArgumentType>(@NonNull Function<ArgumentType> function, @NonNull ArgumentType argument) implements Node {
         @Override public boolean evaluate(@NonNull Context context) {
-            return function.test(context, argument);
+            PreFunctionTestEvent<ArgumentType> event = new PreFunctionTestEvent<>(function, context, argument);
+
+            boolean result = function.test(context, argument) && event.callEvent();
+
+            new FunctionTestedEvent<>(function, context, argument, result).callEvent();
+
+            return result;
         }
 
         static <ArgumentType> @NonNull Call<ArgumentType> of(@NonNull Function<ArgumentType> function, @NonNull List<String> arguments) throws FilterCompileException {
