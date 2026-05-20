@@ -114,6 +114,7 @@ public final class Hopplet extends Plugin {
             "enable", true,
             "filter", Map.of(
                 "disable_hopper_on_compilation_error", true,
+                "transfer_next_applicable_item", true,
                 "edit", Map.of(
                     "dialog", Map.of(
                         "title_text", "<gold><bold>Hopplet",

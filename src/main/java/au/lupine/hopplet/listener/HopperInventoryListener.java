@@ -20,6 +20,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
+import org.spongepowered.configurate.ConfigurationNode;
+
+import java.util.HashMap;
 
 public final class HopperInventoryListener implements Listener {
 
@@ -31,6 +34,8 @@ public final class HopperInventoryListener implements Listener {
         InventoryHolder holder = destination.getHolder(false);
         if (holder == null) return;
 
+        ConfigurationNode filterNode = Hopplet.instance().config().root().node("filter");
+
         Filter filter;
         try {
             filter = switch (holder) {
@@ -39,7 +44,7 @@ public final class HopperInventoryListener implements Listener {
                 default -> null;
             };
         } catch (FilterCompileException e) {
-            if (Hopplet.instance().config().root().node("filter", "disable_hopper_on_compilation_error").getBoolean(false)) event.setCancelled(true);
+            if (filterNode.node("disable_hopper_on_compilation_error").getBoolean(false)) event.setCancelled(true);
             return;
         }
 
@@ -49,14 +54,46 @@ public final class HopperInventoryListener implements Listener {
         if (filter != null) {
             Context context = new HopperInventoryTransferContext(item, source, destination);
 
-            if (!filter.test(context)) event.setCancelled(true);
+            if (!filter.test(context)) {
+                event.setCancelled(true);
+
+                // If the item in the first non-empty slot wasn't accepted by this filter,
+                // we'll look to see if any other items might be accepted.
+                if (!filterNode.node("transfer_next_applicable_item").getBoolean(true)) return;
+
+                boolean firstItem = true;
+
+                for (ItemStack stack : source.getStorageContents()) {
+                    if (stack == null) continue;
+
+                    if (firstItem) { // We already know that the first item was not accepted by this filter, skip it.
+                        firstItem = false;
+                        continue;
+                    }
+
+                    context = new HopperInventoryTransferContext(stack, source, destination);
+                    if (!filter.test(context)) continue;
+
+                    ItemStack clone = stack.clone();
+                    clone.setAmount(1);
+
+                    HashMap<Integer, ItemStack> remaining = destination.addItem(clone);
+
+                    if (remaining.isEmpty()) stack.setAmount(stack.getAmount() - 1);
+
+                    return;
+                }
+            }
+
             return;
         }
+
+        // Find a more "applicable" hopper.
 
         if (!(holder instanceof Hopper destinationHopper)) return;
 
         Hopper alternative = HopperRouting.alternative(source, destinationHopper);
-        if (alternative == null) return;
+        if (alternative == null) return; // No other hopper connected to the source was found.
 
         if (!HopperRouting.enabled(alternative)) return;
 
