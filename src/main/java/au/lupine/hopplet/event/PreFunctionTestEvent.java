@@ -23,7 +23,7 @@ public final class PreFunctionTestEvent<ArgumentType> extends Event implements C
         this.argument = argument;
     }
 
-    public @NonNull Function<?> filter() {
+    public @NonNull Function<?> function() {
         return function;
     }
 
