@@ -6,12 +6,12 @@ import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-public final class HopperPickupItemContext implements ItemEntityContext, InventoryTransferContext {
+public final class HopperPickUpItemContext implements ItemEntityContext, InventoryTransferContext {
 
     private final @NonNull Item item;
     private final @NonNull Inventory destination;
 
-    public HopperPickupItemContext(@NonNull Item item, @NonNull Inventory destination) {
+    public HopperPickUpItemContext(@NonNull Item item, @NonNull Inventory destination) {
         this.item = item;
         this.destination = destination;
     }

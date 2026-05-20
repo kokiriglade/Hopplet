@@ -5,7 +5,7 @@ import au.lupine.hopplet.filter.Filter;
 import au.lupine.hopplet.filter.cache.Cache;
 import au.lupine.hopplet.filter.context.Context;
 import au.lupine.hopplet.filter.context.HopperInventoryTransferContext;
-import au.lupine.hopplet.filter.context.HopperPickupItemContext;
+import au.lupine.hopplet.filter.context.HopperPickUpItemContext;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import au.lupine.hopplet.util.HopperRouting;
 import org.bukkit.block.Hopper;
@@ -134,7 +134,7 @@ public final class HopperInventoryListener implements Listener {
 
         if (filter == null) return;
 
-        Context context = new HopperPickupItemContext(event.getItem(), inventory);
+        Context context = new HopperPickUpItemContext(event.getItem(), inventory);
 
         if (!filter.test(context)) event.setCancelled(true);
     }
