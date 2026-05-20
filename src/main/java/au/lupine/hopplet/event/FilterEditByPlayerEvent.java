@@ -1,6 +1,7 @@
 package au.lupine.hopplet.event;
 
 import au.lupine.hopplet.filter.Filter;
+import au.lupine.hopplet.filter.edit.EditTarget;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -13,11 +14,13 @@ public final class FilterEditByPlayerEvent extends Event {
     private static final @NonNull HandlerList HANDLER_LIST = new HandlerList();
 
     private final @NonNull Player player;
+    private final @NonNull EditTarget target;
     private final @NonNull String raw;
     private final @Nullable Filter filter;
 
-    public FilterEditByPlayerEvent(@NonNull Player player, @NonNull String raw, @Nullable Filter filter) {
+    public FilterEditByPlayerEvent(@NonNull Player player, @NonNull EditTarget target, @NonNull String raw, @Nullable Filter filter) {
         this.player = player;
+        this.target = target;
         this.raw = raw;
         this.filter = filter;
     }
@@ -26,10 +29,16 @@ public final class FilterEditByPlayerEvent extends Event {
         return player;
     }
 
+    public @NonNull EditTarget target() {
+        return target;
+    }
+
     public @NonNull String raw() {
         return raw;
     }
 
+    /// Filter is null if {@link #raw()} is blank, or if it did not successfully compile.
+    /// Hopplet is designed to change the name of an edit target even if it did not successfully compile to avoid losing edits.
     public @Nullable Filter filter() {
         return filter;
     }

@@ -37,18 +37,15 @@ public interface EditTarget {
 
         try {
             filter = Compiler.compile(input);
+
+            PreFilterEditByPlayerEvent event = new PreFilterEditByPlayerEvent(player, this, input, filter);
+            if (!event.callEvent()) throw new FilterCompileException(event.message());
         } catch (FilterCompileException e) {
             player.sendMessage(e);
         }
 
-        PreFilterEditByPlayerEvent event = new PreFilterEditByPlayerEvent(player, input, filter);
-        if (!event.callEvent()) {
-            player.sendMessage(event.message());
-            return;
-        }
-
         edit(input, filter);
 
-        new FilterEditByPlayerEvent(player, input, filter).callEvent();
+        new FilterEditByPlayerEvent(player, this, input, filter).callEvent();
     }
 }

@@ -1,6 +1,7 @@
 package au.lupine.hopplet.event;
 
 import au.lupine.hopplet.filter.Filter;
+import au.lupine.hopplet.filter.edit.EditTarget;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -17,13 +18,15 @@ public final class PreFilterEditByPlayerEvent extends Event implements Cancellab
     private boolean cancelled;
 
     private final @NonNull Player player;
+    private final @NonNull EditTarget target;
     private final @NonNull String raw;
     private final @Nullable Filter filter;
 
     private @NonNull Component message = Component.translatable("hopplet.filter.compilation.exception.edit_cancelled");
 
-    public PreFilterEditByPlayerEvent(@NonNull Player player, @NonNull String raw, @Nullable Filter filter) {
+    public PreFilterEditByPlayerEvent(@NonNull Player player, @NonNull EditTarget target, @NonNull String raw, @Nullable Filter filter) {
         this.player = player;
+        this.target = target;
         this.raw = raw;
         this.filter = filter;
     }
@@ -32,10 +35,16 @@ public final class PreFilterEditByPlayerEvent extends Event implements Cancellab
         return player;
     }
 
+    public @NonNull EditTarget target() {
+        return target;
+    }
+
     public @NonNull String raw() {
         return raw;
     }
 
+    /// Filter is null if {@link #raw()} is blank, or if it did not successfully compile.
+    /// Hopplet is designed to change the name of an edit target even if it did not successfully compile to avoid losing edits.
     public @Nullable Filter filter() {
         return filter;
     }
