@@ -84,7 +84,7 @@ public final class EnchantmentFunction implements Matcher<Pair<Enchantment, Comp
 
         if (enchantments.isEmpty()) return false;
 
-        Integer level = enchantments.get(pair.left()); // TODO: unbreaking>=1 doesn't work, unbreaking=3 does
+        Integer level = enchantments.get(pair.left());
         if (level == null) return false;
 
         return pair.right().test(level);
