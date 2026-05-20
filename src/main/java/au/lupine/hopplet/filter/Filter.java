@@ -1,5 +1,7 @@
 package au.lupine.hopplet.filter;
 
+import au.lupine.hopplet.event.FilterTestedEvent;
+import au.lupine.hopplet.event.PreFilterTestEvent;
 import au.lupine.hopplet.filter.compiler.Compiler;
 import au.lupine.hopplet.filter.compiler.Node;
 import au.lupine.hopplet.filter.context.Context;
@@ -68,7 +70,13 @@ public final class Filter {
 
     /// @return `true` if the filter accepts the specified {@link Context}.
     public boolean test(@NonNull Context context) {
-        return root.evaluate(context);
+        PreFilterTestEvent event = new PreFilterTestEvent(this, context);
+
+        boolean result = root.evaluate(context) && event.callEvent();
+
+        new FilterTestedEvent(this, context, result).callEvent();
+
+        return result;
     }
 
     /// @return `true` if the filter accepts the specified {@link ItemStack}.
