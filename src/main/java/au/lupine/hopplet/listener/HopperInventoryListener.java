@@ -79,9 +79,10 @@ public final class HopperInventoryListener implements Listener {
 
                     HashMap<Integer, ItemStack> remaining = destination.addItem(clone);
 
-                    if (remaining.isEmpty()) stack.setAmount(stack.getAmount() - 1);
-
-                    return;
+                    if (remaining.isEmpty()) {
+                        stack.setAmount(stack.getAmount() - 1);
+                        return;
+                    }
                 }
             }
 
