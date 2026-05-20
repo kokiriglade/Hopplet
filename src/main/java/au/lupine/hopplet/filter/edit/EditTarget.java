@@ -38,6 +38,7 @@ public interface EditTarget {
         try {
             filter = Compiler.compile(input);
 
+            // TODO: move this into EditDialog, implementation shouldn't throw events (for api users)
             PreFilterEditByPlayerEvent event = new PreFilterEditByPlayerEvent(player, this, input, filter);
             if (!event.callEvent()) throw new FilterCompileException(event.message());
         } catch (FilterCompileException e) {

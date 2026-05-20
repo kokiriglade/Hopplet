@@ -100,8 +100,7 @@ public final class Hopplet extends Plugin {
             new ThrowerTownFunction()
         );
 
-        HoppletLoadedEvent loaded = new HoppletLoadedEvent();
-        loaded.callEvent();
+        new HoppletLoadedEvent().callEvent();
     }
 
     @Override
