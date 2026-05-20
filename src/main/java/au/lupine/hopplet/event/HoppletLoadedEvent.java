@@ -2,7 +2,6 @@ package au.lupine.hopplet.event;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
 public final class HoppletLoadedEvent extends Event {
@@ -14,7 +13,7 @@ public final class HoppletLoadedEvent extends Event {
     }
 
     @Override
-    public @NotNull HandlerList getHandlers() {
+    public @NonNull HandlerList getHandlers() {
         return HANDLER_LIST;
     }
 }

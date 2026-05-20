@@ -4,7 +4,6 @@ import au.lupine.hopplet.filter.context.Context;
 import au.lupine.hopplet.filter.function.Function;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
 public final class FunctionTestedEvent<ArgumentType> extends Event {
@@ -44,7 +43,7 @@ public final class FunctionTestedEvent<ArgumentType> extends Event {
     }
 
     @Override
-    public @NotNull HandlerList getHandlers() {
+    public @NonNull HandlerList getHandlers() {
         return HANDLER_LIST;
     }
 }

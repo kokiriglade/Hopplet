@@ -5,7 +5,6 @@ import au.lupine.hopplet.filter.context.Context;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
 public final class PreFilterTestEvent extends Event implements Cancellable {
@@ -35,7 +34,7 @@ public final class PreFilterTestEvent extends Event implements Cancellable {
     }
 
     @Override
-    public @NotNull HandlerList getHandlers() {
+    public @NonNull HandlerList getHandlers() {
         return HANDLER_LIST;
     }
 
