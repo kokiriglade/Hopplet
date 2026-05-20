@@ -115,7 +115,7 @@ public final class HopperInventoryListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void on(@NonNull InventoryPickupItemEvent event) {
         Inventory inventory = event.getInventory();
-        if (!inventory.getType().equals(InventoryType.HOPPER)) return;
+        if (inventory.getType() != InventoryType.HOPPER) return;
 
         InventoryHolder holder = inventory.getHolder(false);
         if (holder == null) return;
