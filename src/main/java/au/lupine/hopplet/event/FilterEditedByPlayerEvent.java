@@ -8,7 +8,7 @@ import org.bukkit.event.HandlerList;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-public final class FilterEditByPlayerEvent extends Event {
+public final class FilterEditedByPlayerEvent extends Event {
 
     private static final @NonNull HandlerList HANDLER_LIST = new HandlerList();
 
@@ -17,7 +17,7 @@ public final class FilterEditByPlayerEvent extends Event {
     private final @NonNull String raw;
     private final @Nullable Filter filter;
 
-    public FilterEditByPlayerEvent(@NonNull Player player, @NonNull EditTarget target, @NonNull String raw, @Nullable Filter filter) {
+    public FilterEditedByPlayerEvent(@NonNull Player player, @NonNull EditTarget target, @NonNull String raw, @Nullable Filter filter) {
         this.player = player;
         this.target = target;
         this.raw = raw;

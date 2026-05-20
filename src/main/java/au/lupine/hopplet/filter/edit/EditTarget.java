@@ -1,6 +1,6 @@
 package au.lupine.hopplet.filter.edit;
 
-import au.lupine.hopplet.event.FilterEditByPlayerEvent;
+import au.lupine.hopplet.event.FilterEditedByPlayerEvent;
 import au.lupine.hopplet.event.PreFilterEditByPlayerEvent;
 import au.lupine.hopplet.filter.Filter;
 import au.lupine.hopplet.filter.compiler.Compiler;
@@ -47,6 +47,6 @@ public interface EditTarget {
 
         edit(input, filter);
 
-        new FilterEditByPlayerEvent(player, this, input, filter).callEvent();
+        new FilterEditedByPlayerEvent(player, this, input, filter).callEvent();
     }
 }
