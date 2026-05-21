@@ -4,8 +4,7 @@ import au.lupine.hopplet.filter.Filter;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.block.Hopper;
-import org.bukkit.entity.minecart.HopperMinecart;
+import org.bukkit.Nameable;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -36,11 +35,7 @@ public final class Compiler {
         return compile(PlainTextComponentSerializer.plainText().serialize(component));
     }
 
-    public static @Nullable Filter compile(@NonNull Hopper hopper) throws FilterCompileException {
-        return compile(hopper.customName());
-    }
-
-    public static @Nullable Filter compile(@NonNull HopperMinecart hopper) throws FilterCompileException {
-        return compile(hopper.customName());
+    public static @Nullable Filter compile(@NonNull Nameable nameable) throws FilterCompileException {
+        return compile(nameable.customName());
     }
 }
