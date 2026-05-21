@@ -56,7 +56,7 @@ public final class Cache {
         return filterMap.get(packChunkRelativeCoords(x, y, z));
     }
 
-    public static void invalidate(final UUID worldUUID, final int x, final int y, final int z){
+    public static void invalidate(final UUID worldUUID, final int x, final int y, final int z) {
         final AbstractInt2ObjectMap<Filter> filterMap = getChunkFilterMap(worldUUID, x, z);
         if (filterMap != null) filterMap.remove(packChunkRelativeCoords(x, y, z));
     }

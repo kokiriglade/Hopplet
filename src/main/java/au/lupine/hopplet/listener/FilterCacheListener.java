@@ -29,7 +29,7 @@ import java.util.Map;
 
 public final class FilterCacheListener implements Listener {
 
-    private void invalidate(@NonNull World world,@NonNull Collection<Block> blocks) {
+    private void invalidate(@NonNull World world, @NonNull Collection<Block> blocks) {
         Map<Long, AbstractInt2ObjectMap<Filter>> worldChunkCache = Cache.BLOCK_CACHE.get(world.getUID());
         if (worldChunkCache == null) return;
 
