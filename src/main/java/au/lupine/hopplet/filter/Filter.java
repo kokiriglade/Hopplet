@@ -65,6 +65,10 @@ public final class Filter {
         return Compiler.compile(component);
     }
 
+    public static @Nullable Filter of(@NonNull Nameable nameable, boolean styled) throws FilterCompileException {
+        return Compiler.compile(nameable, styled);
+    }
+
     public static @Nullable Filter of(@NonNull Nameable nameable) throws FilterCompileException {
         return Compiler.compile(nameable);
     }
