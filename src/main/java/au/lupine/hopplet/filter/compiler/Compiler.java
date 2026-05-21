@@ -25,17 +25,36 @@ public final class Compiler {
     }
 
     /// Compiles a component into a {@link Filter}.
-    /// @return A compiled filter, or null if the component is null, or does not contain {@link Filter#style}.
+    /// @param styled Whether the component's style should be checked against {@link Filter#style}.
+    /// @return A compiled filter, or null if the component is null, or only contains whitespace.
     /// @throws FilterCompileException Thrown if the underlying string has a compilation error.
-    public static @Nullable Filter compile(@Nullable Component component) throws FilterCompileException {
+    public static @Nullable Filter compile(@Nullable Component component, boolean styled) throws FilterCompileException {
         if (component == null) return null;
 
-        if (!component.style().equals(Filter.style)) return null; // Extract this check for API?
+        if (styled && !component.style().equals(Filter.style)) return null;
 
         return compile(PlainTextComponentSerializer.plainText().serialize(component));
     }
 
+    /// Compiles a component into a {@link Filter}.
+    /// @return A compiled filter, or null if the component is null, only contains whitespace, or does not contain {@link Filter#style}.
+    /// @throws FilterCompileException Thrown if the underlying string has a compilation error.
+    public static @Nullable Filter compile(@Nullable Component component) throws FilterCompileException {
+        return compile(component, true);
+    }
+
+    /// Compiles a {@link Nameable} into a {@link Filter} using the result of {@link Nameable#customName()}.
+    /// @param styled Whether the component's style should be checked against {@link Filter#style}.
+    /// @return A compiled filter, or null if the component is null, or only contains whitespace.
+    /// @throws FilterCompileException Thrown if the underlying string has a compilation error.
+    public static @Nullable Filter compile(@NonNull Nameable nameable, boolean styled) throws FilterCompileException {
+        return compile(nameable.customName(), styled);
+    }
+
+    /// Compiles a {@link Nameable} into a {@link Filter} using the result of {@link Nameable#customName()}.
+    /// @return A compiled filter, or null if the component is null, only contains whitespace, or does not contain {@link Filter#style}.
+    /// @throws FilterCompileException Thrown if the underlying string has a compilation error.
     public static @Nullable Filter compile(@NonNull Nameable nameable) throws FilterCompileException {
-        return compile(nameable.customName());
+        return compile(nameable, true);
     }
 }

@@ -13,6 +13,7 @@ import au.lupine.hopplet.filter.exception.FilterCompileException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
+import org.bukkit.Nameable;
 import org.bukkit.block.Hopper;
 import org.bukkit.entity.minecart.HopperMinecart;
 import org.bukkit.inventory.ItemStack;
@@ -56,16 +57,16 @@ public final class Filter {
         return Compiler.compile(raw);
     }
 
+    public static @Nullable Filter of(@Nullable Component component, boolean styled) throws FilterCompileException {
+        return Compiler.compile(component, styled);
+    }
+
     public static @Nullable Filter of(@Nullable Component component) throws FilterCompileException {
         return Compiler.compile(component);
     }
 
-    public static @Nullable Filter of(@NonNull Hopper hopper) throws FilterCompileException {
-        return Compiler.compile(hopper);
-    }
-
-    public static @Nullable Filter of(@NonNull HopperMinecart hopper) throws FilterCompileException {
-        return Compiler.compile(hopper);
+    public static @Nullable Filter of(@NonNull Nameable nameable) throws FilterCompileException {
+        return Compiler.compile(nameable);
     }
 
     /// @return `true` if the filter accepts the specified {@link Context}.
