@@ -4,9 +4,12 @@ import au.lupine.hopplet.Hopplet;
 import au.lupine.hopplet.filter.context.Context;
 import au.lupine.hopplet.filter.function.Predicate;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NonNull;
 
+import java.util.List;
 import java.util.Set;
 
 public final class HasLoreFunction implements Predicate {
@@ -33,6 +36,17 @@ public final class HasLoreFunction implements Predicate {
 
     @Override
     public boolean test(@NonNull Context context, @NonNull Void compiled) {
-        return context.stack().getItemMeta().hasLore();
+        ItemStack stack = context.stack();
+
+        List<Component> lore = stack.lore();
+        if (lore == null) return false;
+
+        if (lore.isEmpty()) return false;
+
+        for (Component component : lore) {
+            if (!PlainTextComponentSerializer.plainText().serialize(component).isEmpty()) return true;
+        }
+
+        return false;
     }
 }
