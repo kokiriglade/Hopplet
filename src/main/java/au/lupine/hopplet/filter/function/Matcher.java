@@ -82,5 +82,15 @@ public interface Matcher<ArgumentType> extends Function<List<ArgumentType>> {
         static <ArgumentType> @NonNull MatchStrategy<ArgumentType> or() {
             return any();
         }
+
+        static <ArgumentType> @NonNull MatchStrategy<ArgumentType> atLeast(int amount) {
+            return ((context, arguments, matches) -> {
+                int numMatched = 0;
+                for (ArgumentType argument : arguments) {
+                    if (matches.test(context, argument)) numMatched += 1;
+                }
+                return numMatched >= amount;
+            });
+        }
     }
 }
