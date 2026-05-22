@@ -66,6 +66,10 @@ public interface Matcher<ArgumentType> extends Function<List<ArgumentType>> {
             };
         }
 
+        static <ArgumentType> @NonNull MatchStrategy<ArgumentType> and() {
+            return all();
+        }
+
         static <ArgumentType> @NonNull MatchStrategy<ArgumentType> any() {
             return (context, arguments, matches) -> {
                 for (ArgumentType argument : arguments) {
@@ -73,6 +77,10 @@ public interface Matcher<ArgumentType> extends Function<List<ArgumentType>> {
                 }
                 return false;
             };
+        }
+
+        static <ArgumentType> @NonNull MatchStrategy<ArgumentType> or() {
+            return any();
         }
     }
 }
