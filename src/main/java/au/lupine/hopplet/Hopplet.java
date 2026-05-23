@@ -125,7 +125,9 @@ public final class Hopplet extends Plugin {
                         "documentation_url", "https://github.com/jwkerr/Hopplet/wiki",
                         "show_discord", true,
                         "discord_url", "https://discord.lupine.au",
-                        "max_input_length", 512
+                        "max_input_length", 512,
+                        "input_width", 300,
+                        "input_height", 100
                     )
                 ),
                 "function", Map.of(

@@ -91,9 +91,9 @@ public final class EditDialog {
                 .inputs(List.of(
                     DialogInput.text("filter_input", translate(player, "hopplet.dialog.edit_filter.input.filter_input"))
                         .initial(text)
-                        .maxLength(node.node("max_input_length").getInt())
-                        .width(300)
-                        .multiline(TextDialogInput.MultilineOptions.create(null, 100))
+                        .maxLength(node.node("max_input_length").getInt(512))
+                        .width(node.node("input_width").getInt(300))
+                        .multiline(TextDialogInput.MultilineOptions.create(null, node.node("input_height").getInt(100)))
                         .build()
                 ))
                 .build()
