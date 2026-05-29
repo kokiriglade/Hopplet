@@ -89,6 +89,7 @@ public final class Hopplet extends Plugin {
             new MaterialStartsWithFunction(),
             new PotionDurationFunction(),
             new PotionEffectFunction(),
+            new PotionTypeFunction(),
             new RarityFunction(),
             new SkullOwnerFunction(),
             new SkullTextureFunction(),
