@@ -22,7 +22,9 @@ import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
 import org.spongepowered.configurate.ConfigurationNode;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Objects;
 
 public final class HopperInventoryListener implements Listener {
 
@@ -52,41 +54,36 @@ public final class HopperInventoryListener implements Listener {
         Inventory source = event.getSource();
 
         if (filter != null) {
-            Context context = new HopperInventoryTransferContext(item, source, destination);
+            if (filter.test(new HopperInventoryTransferContext(item, source, destination))) return;
 
-            if (!filter.test(context)) {
-                event.setCancelled(true);
+            event.setCancelled(true);
 
-                // If the item in the first non-empty slot wasn't accepted by this filter,
-                // we'll look to see if any other items might be accepted.
-                if (!filterNode.node("transfer_next_applicable_item").getBoolean(true)) return;
+            // If the item in the first non-empty slot wasn't accepted by this filter,
+            // we'll look to see if any other items might be accepted.
+            if (!filterNode.node("transfer_next_applicable_item").getBoolean(true)) return;
 
-                boolean firstItem = true;
+            boolean firstItem = true;
 
-                for (ItemStack stack : source.getStorageContents()) {
-                    if (stack == null) continue;
+            for (ItemStack stack : source.getStorageContents()) {
+                if (stack == null) continue;
 
-                    if (firstItem) { // We already know that the first item was not accepted by this filter, skip it.
-                        firstItem = false;
-                        continue;
-                    }
+                if (firstItem) { // We already know that the first item was not accepted by this filter, skip it.
+                    firstItem = false;
+                    continue;
+                }
 
-                    context = new HopperInventoryTransferContext(stack, source, destination);
-                    if (!filter.test(context)) continue;
+                if (!filter.test(new HopperInventoryTransferContext(stack, source, destination))) continue;
 
-                    ItemStack clone = stack.clone();
-                    clone.setAmount(1);
+                ItemStack clone = stack.clone();
+                clone.setAmount(1);
 
-                    HashMap<Integer, ItemStack> remaining = destination.addItem(clone);
+                HashMap<Integer, ItemStack> remaining = destination.addItem(clone);
 
-                    if (remaining.isEmpty()) {
-                        stack.setAmount(stack.getAmount() - 1);
-                        return;
-                    }
+                if (remaining.isEmpty()) {
+                    stack.setAmount(stack.getAmount() - 1);
+                    return;
                 }
             }
-
-            return;
         }
 
         // Find a more "applicable" hopper.
