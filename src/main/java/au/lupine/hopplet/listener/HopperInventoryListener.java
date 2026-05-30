@@ -22,9 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
 import org.spongepowered.configurate.ConfigurationNode;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Objects;
 
 public final class HopperInventoryListener implements Listener {
 
