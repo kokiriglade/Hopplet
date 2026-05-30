@@ -25,9 +25,7 @@ public final class PotionTypeFunction implements Matcher<PotionType> {
 
     @Override
     public @NonNull Set<String> aliases() {
-        return Set.of(
-            "pot_type"
-        );
+        return Set.of("pot_type");
     }
 
     @Override
