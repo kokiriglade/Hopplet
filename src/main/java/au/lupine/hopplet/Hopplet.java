@@ -114,7 +114,7 @@ public final class Hopplet extends Plugin {
         return Map.of(
             "enable", true,
             "filter", Map.of(
-                "disable_hopper_on_compilation_error", true,
+                "disable_hopper_on_compilation_error", true, // TODO: change this before 1.0 to disable_on_compilation_error (clearer for api users)
                 "transfer_next_applicable_item", true,
                 "edit", Map.of(
                     "dialog", Map.of(
