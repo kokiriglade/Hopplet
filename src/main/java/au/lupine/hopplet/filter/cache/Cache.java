@@ -3,6 +3,7 @@ package au.lupine.hopplet.filter.cache;
 import au.lupine.hopplet.filter.Filter;
 import au.lupine.hopplet.filter.compiler.Compiler;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
+import ca.spottedleaf.concurrentutil.map.concurrent.longs.ConcurrentChainedLong2ReferenceHashTable;
 import it.unimi.dsi.fastutil.ints.AbstractInt2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import org.bukkit.Chunk;
@@ -17,16 +18,17 @@ import org.jspecify.annotations.Nullable;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 public final class Cache {
 
     // Using multiple nested maps allows invalidating a full world/chunk at once, doubt there's any noticeable difference in lookup speed
     // an important assumption is that only the region thread responsible for the chunk will access the final int to object map
-    public static final Map<UUID, Map<Long, AbstractInt2ObjectMap<Filter>>> BLOCK_CACHE = new ConcurrentHashMap<>();
+    public static final Map<UUID, ConcurrentChainedLong2ReferenceHashTable<AbstractInt2ObjectMap<Filter>>> BLOCK_CACHE = new ConcurrentHashMap<>();
     public static final Map<UUID, Filter> ENTITY_CACHE = new ConcurrentHashMap<>();
 
-    private static final java.util.function.Function<UUID, Map<Long, AbstractInt2ObjectMap<Filter>>> NEW_WORLD_CHUNK_MAP = ignored -> new ConcurrentHashMap<>();
-    private static final java.util.function.Function<Long, AbstractInt2ObjectMap<Filter>> NEW_CHUNK_MAP = ignored -> new Int2ObjectOpenHashMap<>();
+    private static final Function<UUID, ConcurrentChainedLong2ReferenceHashTable<AbstractInt2ObjectMap<Filter>>> NEW_WORLD_CHUNK_MAP = ignored -> new ConcurrentChainedLong2ReferenceHashTable<>();
+    private static final ConcurrentChainedLong2ReferenceHashTable.BiLongObjectFunction<AbstractInt2ObjectMap<Filter>> NEW_CHUNK_MAP = ignored -> new Int2ObjectOpenHashMap<>();
 
     // Generic methods
 
@@ -43,7 +45,7 @@ public final class Cache {
     }
 
     private static @Nullable AbstractInt2ObjectMap<Filter> getChunkFilterMap(final UUID worldUUID, final int x, final int z) {
-        final Map<Long, AbstractInt2ObjectMap<Filter>> chunkMap = BLOCK_CACHE.get(worldUUID);
+        final ConcurrentChainedLong2ReferenceHashTable<AbstractInt2ObjectMap<Filter>> chunkMap = BLOCK_CACHE.get(worldUUID);
         if (chunkMap == null) return null;
 
         return chunkMap.get(Chunk.getChunkKey(x >> 4, z >> 4));
