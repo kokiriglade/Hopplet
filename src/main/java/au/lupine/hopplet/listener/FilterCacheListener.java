@@ -4,6 +4,7 @@ import au.lupine.hopplet.filter.Filter;
 import au.lupine.hopplet.filter.cache.Cache;
 import au.lupine.hopplet.filter.compiler.Compiler;
 import au.lupine.hopplet.filter.exception.FilterCompileException;
+import ca.spottedleaf.concurrentutil.map.concurrent.longs.ConcurrentChainedLong2ReferenceHashTable;
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
 import it.unimi.dsi.fastutil.ints.AbstractInt2ObjectMap;
 import org.bukkit.Chunk;
@@ -25,12 +26,11 @@ import org.bukkit.event.world.WorldUnloadEvent;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Collection;
-import java.util.Map;
 
 public final class FilterCacheListener implements Listener {
 
     private void invalidate(@NonNull World world, @NonNull Collection<Block> blocks) {
-        Map<Long, AbstractInt2ObjectMap<Filter>> worldChunkCache = Cache.BLOCK_CACHE.get(world.getUID());
+        ConcurrentChainedLong2ReferenceHashTable<AbstractInt2ObjectMap<Filter>> worldChunkCache = Cache.BLOCK_CACHE.get(world.getUID());
         if (worldChunkCache == null) return;
 
         for (Block block : blocks) {
@@ -102,7 +102,7 @@ public final class FilterCacheListener implements Listener {
 
     @EventHandler
     public void cleanupBlockFilterCache(@NonNull ChunkUnloadEvent event) {
-        Map<Long, ?> worldChunkCache = Cache.BLOCK_CACHE.get(event.getWorld().getUID());
+        ConcurrentChainedLong2ReferenceHashTable<?> worldChunkCache = Cache.BLOCK_CACHE.get(event.getWorld().getUID());
 
         if (worldChunkCache == null) return;
 
