@@ -16,12 +16,15 @@ dependencies {
 
     compileOnly("org.spongepowered:configurate-gson:4.2.0")
 
-    compileOnly("com.github.jwkerr:Bottlet:fc8a8adfde")
-    compileOnly("com.palmergames.bukkit.towny:towny:0.103.0.0")
     implementation("ca.spottedleaf:concurrentutil:0.0.10") {
         exclude("net.java.dev.jna:jna")
         exclude("it.unimi.dsi:fastutil")
     }
+
+    // Function compatibility dependencies
+
+    compileOnly("com.github.jwkerr:Bottlet:fc8a8adfde")
+    compileOnly("com.palmergames.bukkit.towny:towny:0.103.0.0")
 }
 
 java {
