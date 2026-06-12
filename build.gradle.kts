@@ -1,6 +1,7 @@
 plugins {
     id("java-library")
     id("xyz.jpenilla.run-paper") version "3.0.2"
+    id("com.gradleup.shadow") version "9.4.2"
 }
 
 repositories {
@@ -14,6 +15,13 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
 
     compileOnly("org.spongepowered:configurate-gson:4.2.0")
+
+    implementation("ca.spottedleaf:concurrentutil:0.0.10") {
+        exclude("net.java.dev.jna:jna")
+        exclude("it.unimi.dsi:fastutil")
+    }
+
+    // Function compatibility dependencies
 
     compileOnly("com.github.jwkerr:Bottlet:fc8a8adfde")
     compileOnly("com.palmergames.bukkit.towny:towny:0.103.0.0")
@@ -39,5 +47,14 @@ tasks {
         filesMatching("plugin.yml") {
             expand(props)
         }
+    }
+
+    shadowJar {
+        archiveClassifier.set("")
+        minimize()
+
+        relocate("ca.spottedleaf.concurrentutil", "au.lupine.hopplet.libs.concurrentutil")
+        exclude("com/sun/jna/**")
+        exclude("it/unimi/dsi/fastutil/**")
     }
 }
